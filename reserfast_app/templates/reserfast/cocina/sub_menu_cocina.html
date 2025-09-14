@@ -1,0 +1,43 @@
+{% load static %}
+
+
+
+<div class="d-flex">
+    <!-- Contenido principal de mesas y sillas -->
+    <div class="flex-grow-1">
+        <div class="container mesas mt-4">
+            <h1 class="text-center tipo-menu"> {{ titulo }}</h1>
+            <hr>
+            <div class="row">
+                                {% for card in cards %}
+                <div class="col-6 col-md-3">
+                    <div class="container card-menu">
+                        <div class="card card-custom">
+                                                                                                                {% if card.s_notas %}
+                                                                                                                        <img class="card-img-top card-img-available" src="{{ card.s_notas.url }}" alt="{{ card.s_titulomenu }}"/>
+                                                                                                                {% else %}
+                                                                                                                        <div class="d-flex align-items-center justify-content-center bg-light" style="height:140px;">
+                                                                                                                            <i class="fas fa-utensils fa-2x text-muted"></i>
+                                                                                                                        </div>
+                                                                                                                {% endif %}
+                            <div class="card-body menu">    
+                                                                <h4 class="card-title">{{ card.s_titulomenu }}</h4>
+                                                                {% if card.s_descripcionmenu %}
+                                                                    <p class="card-text">{{ card.s_descripcionmenu }}</p>
+                                                                {% endif %}
+                                                                <p class="card-text precio-menu"> $ {{ card.i_precio|default:0 }}</p>
+                                                                <form method="post" action="{% url 'reserfast:toggle_menu_cocina' card.id_menu %}">
+                                                                    {% csrf_token %}
+                                                                    <button class="btn {% if card.b_activo %}btn-outline-danger{% else %}btn-outline-success{% endif %}" type="submit">
+                                                                        {% if card.b_activo %}Desactivar{% else %}Activar{% endif %}
+                                                                    </button>
+                                                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReserFast Demo</title>
+    <link rel="stylesheet" href="{% static "css/cliente_exito.css" %}">
+</head>
+<body>
+<h1>ReserFast Demo</h1>
+    <div class="notification-box">
+        <div class="notification-content">
+            <div class="checkmark">
+                <img src="{% static "index_img/checked.png" %}">
+            </div>
+            <h3>Usuario registrado exitosamente</h3>
+            <a class="btn" href="{% url 'reserfast:login_clientes' %}" > Volver </a>
+        </div>
+    </div>
+</body>
+</html>

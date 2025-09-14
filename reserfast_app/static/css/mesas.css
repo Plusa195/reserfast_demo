@@ -1,0 +1,92 @@
+/*css para las mesas y menus*/
+
+
+.mesas-section {
+    background-color: #212529b8;
+    padding: 2rem 0;
+    font-family: 'Playpen Sans', ui-monospace;
+}
+
+/*color para el texto*/
+.mesas-section .text-center{
+    color : cornsilk;
+}
+
+.mesas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.mesa-card {
+    background-color: #ecfccbc2;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.mesa-card:hover {
+    transform: scale(1.05);
+}
+
+.mesa-image img {
+    width: 100%;
+    display: block;
+}
+
+.mesa-info {
+    padding: 1rem;
+    text-align: center;
+}
+
+.btn {
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+
+
+.form-check-input {
+    width: 30px;               /* Ancho del cuadro */
+    height: 30px;              /* Altura del cuadro */
+    border: 2px solid #4CAF50; /* Borde verde */
+    border-radius: 4px;        /* Bordes redondeados */
+}
+
+.form-check-input:hover {
+    box-shadow: 0 0 5px #4CAF50; /* Sombra verde al pasar el cursor por encima para dar un efecto de resaltado */
+}
+
+
+/*########################################## SELECCION FECHA ###########################################*/
+.reservation-container {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reservation-details {
+    flex: 2;
+}
+
+.total-results {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    border-left: 1px solid white;
+    padding-left: 20px;
+}
+
+.form-group .form-label {
+    color: white;
+}
+
+
+/* diseño para el checkbox*/

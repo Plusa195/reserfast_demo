@@ -1,0 +1,103 @@
+{% extends 'reserfast/clientes/base_cliente.html' %}
+{% load static %}
+
+{% block title %} Panel Cliente - ReserFast {% endblock title%}
+
+{% block body %}
+<div class="container py-5">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-md-10">
+      <div class="text-center mb-5">
+        <img src="{% static 'index_img/logo.png' %}" alt="ReserFast Logo" class="rounded-circle shadow-lg" style="width:120px; height:120px;">
+        <h1 class="display-5 fw-bold mt-3 gradient-text">¡Bienvenido {{ cliente_nombre }}!</h1>
+        <p class="lead">Gestiona tus reservas y menús de forma rápida y sencilla.</p>
+      </div>
+      
+      <!-- Primera fila con 2 cards -->
+      <div class="row g-4 justify-content-center mb-4">
+        <!-- Card Reserva Mesa y Menú -->
+        <div class="col-md-6">
+          <div class="card hover-card h-100" style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1)); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; backdrop-filter: blur(10px);">
+            <div class="card-body text-center py-5">
+              <div class="mb-3">
+                <i class="fas fa-utensils" style="font-size: 4rem; color: #667eea;"></i>
+              </div>
+              <h4 class="card-title mb-3" style="color: var(--text-color); font-weight: 700;">Reserva Mesa y Menú</h4>
+              <p class="card-text text-muted mb-4">Reserva tu mesa y elige tu menú favorito antes de llegar.</p>
+              <a href="{% url 'reserfast:crear_reserva' %}" class="btn btn-primary btn-lg px-4" style="border-radius: 15px; font-weight: 600;">
+                <i class="fas fa-calendar-plus me-2"></i>Nueva Reserva
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Mis Reservas -->
+        <div class="col-md-6">
+          <div class="card hover-card h-100" style="background: linear-gradient(135deg, rgba(236,72,153,0.1), rgba(139,92,246,0.1)); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; backdrop-filter: blur(10px);">
+            <div class="card-body text-center py-5">
+              <div class="mb-3">
+                <i class="fas fa-calendar-check" style="font-size: 4rem; color: #ec4899;"></i>
+              </div>
+              <h4 class="card-title mb-3" style="color: var(--text-color); font-weight: 700;">Mis Reservas</h4>
+              <p class="card-text text-muted mb-4">Consulta y gestiona todas tus reservas activas en un solo lugar.</p>
+              <a href="{% url 'reserfast:mis_reservas' %}" class="btn btn-success btn-lg px-4" style="border-radius: 15px; font-weight: 600;">
+                <i class="fas fa-list me-2"></i>Ver Mis Reservas
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Segunda fila con card centrado -->
+      <div class="row justify-content-center">
+        <!-- Card Mi Perfil -->
+        <div class="col-md-6">
+          <div class="card hover-card h-100" style="background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(16,185,129,0.1)); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; backdrop-filter: blur(10px);">
+            <div class="card-body text-center py-5">
+              <div class="mb-3">
+                <i class="fas fa-user-circle" style="font-size: 4rem; color: #3b82f6;"></i>
+              </div>
+              <h4 class="card-title mb-3" style="color: var(--text-color); font-weight: 700;">Mi Perfil</h4>
+              <p class="card-text text-muted mb-4">Actualiza tu información personal, foto y configuraciones.</p>
+              <a href="{% url 'reserfast:perfil_cliente' %}" class="btn btn-info btn-lg px-4" style="border-radius: 15px; font-weight: 600;">
+                <i class="fas fa-user-edit me-2"></i>Ver Perfil
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-5">
+  <a href="{% url 'reserfast:index' %}" class="btn btn-outline-secondary btn-lg">
+          <i class="fas fa-home"></i> Volver al Inicio
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+body.theme-dark .gradient-text {
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+</style>
+{% endblock body %}

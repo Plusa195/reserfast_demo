@@ -1,0 +1,1591 @@
+{% extends 'reserfast/admin/base_admin.html' %}
+
+{% block title-admin %} Panel de Administración {% endblock title-admin %}
+
+{% block body-admin %}
+
+<div class="container-fluid p-3 text-center">
+    {% csrf_token %}
+    <h2 class="mb-0" style="color: #44403c;">Panel de administración</h2>
+    <small class="text-muted">Bienvenido {{ usuario.s_nombreusuario }}</small>
+    <hr/>
+</div>
+
+<div id="alertContainer" class="container mt-3"></div>
+
+
+
+<!-- Panel de Gestión con Tabs -->
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-cogs"></i> Panel de Gestión Completo</h3>
+        </div>
+        <div class="card-body p-0">
+            <!-- Nav tabs -->
+            <!-- Nav tabs -->
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-garzones-tab" data-bs-toggle="tab" data-bs-target="#nav-garzones" type="button" role="tab">
+                        <i class="fas fa-user-tie"></i> Garzones
+                    </button>
+                    <button class="nav-link" id="nav-cocineros-tab" data-bs-toggle="tab" data-bs-target="#nav-cocineros" type="button" role="tab">
+                        <i class="fas fa-chef-hat"></i> Cocineros
+                    </button>
+                    <button class="nav-link" id="nav-usuarios-tab" data-bs-toggle="tab" data-bs-target="#nav-usuarios" type="button" role="tab">
+                        <i class="fas fa-user-cog"></i> Usuarios
+                    </button>
+                    <button class="nav-link" id="nav-menus-tab" data-bs-toggle="tab" data-bs-target="#nav-menus" type="button" role="tab">
+                        <i class="fas fa-utensils"></i> Menús
+                    </button>
+                    <button class="nav-link" id="nav-mesas-tab" data-bs-toggle="tab" data-bs-target="#nav-mesas" type="button" role="tab">
+                        <i class="fas fa-table"></i> Mesas
+                    </button>
+                    <button class="nav-link" id="nav-reservas-tab" data-bs-toggle="tab" data-bs-target="#nav-reservas" type="button" role="tab">
+                        <i class="fas fa-calendar-check"></i> Reservas
+                    </button>
+                    <button class="nav-link" id="nav-reportes-tab" data-bs-toggle="tab" data-bs-target="#nav-reportes" type="button" role="tab">
+                        <i class="fas fa-chart-line"></i> Reportes
+                    </button>
+                </div>
+            </nav>            <!-- Tab content -->
+            <div class="tab-content p-3" id="nav-tabContent">
+                
+                <!-- Tab Garzones -->
+                <div class="tab-pane fade show active" id="nav-garzones" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Gestión de Garzones</h4>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrearGarzon">
+                            <i class="fas fa-plus"></i> Nuevo Garzón
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="tablaGarzones">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Apellidos</th>
+                                    <th>Usuario</th>
+                                    <th>Estado</th>
+                                    <th>Servicio</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for garzon in garzones %}
+                                <tr>
+                                    <td>{{ garzon.id_usuario }}</td>
+                                    <td>{{ garzon.s_nombreusuario }}</td>
+                                    <td>{{ garzon.s_primerapellidousuario }} {{ garzon.s_segundoapellidousuario }}</td>
+                                    <td>{{ garzon.s_usuario }}</td>
+                                    <td>
+                                        {% if garzon.b_activo %}
+                                            <span class="badge bg-success">Activo</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Inactivo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if garzon.en_servicio %}
+                                            <span class="badge bg-success">En servicio</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Fuera</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary me-1 btn-editar-garzon" 
+                                                data-id="{{ garzon.id_usuario }}" 
+                                                data-nombre="{{ garzon.s_nombreusuario }}" 
+                                                data-primer-apellido="{{ garzon.s_primerapellidousuario }}" 
+                                                data-segundo-apellido="{{ garzon.s_segundoapellidousuario }}" 
+                                                data-usuario="{{ garzon.s_usuario }}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger btn-eliminar-garzon" 
+                                                data-id="{{ garzon.id_usuario }}" 
+                                                data-nombre="{{ garzon.s_nombreusuario }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No hay garzones registrados</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab Reportes -->
+                <div class="tab-pane fade" id="nav-reportes" role="tabpanel">
+                    <div class="mb-3">
+                        <h4>Reportes y Resumen</h4>
+                        <p class="text-muted mb-0">Resumen rápido del sistema.</p>
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <div class="fw-bold">Clientes</div>
+                                    <div class="display-6">{{ total_clientes }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <div class="fw-bold">Garzones</div>
+                                    <div class="display-6">{{ total_garzones }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <div class="fw-bold">Cocineros</div>
+                                    <div class="display-6">{{ total_cocineros }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <div class="fw-bold">Mesas</div>
+                                    <div class="display-6">{{ total_mesas }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <div class="fw-bold">Menús</div>
+                                    <div class="display-6">{{ total_menus }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <div class="fw-bold">Reservas</div>
+                                    <div class="display-6">{{ total_reservas }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-header bg-light">
+                                    Últimos Clientes
+                                </div>
+                                <div class="card-body p-0">
+                                    <table class="table table-sm mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nombre</th>
+                                                <th>Email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for c in ultimos_clientes %}
+                                                <tr>
+                                                    <td>{{ c.id_cliente }}</td>
+                                                    <td>{{ c.s_primernombrecliente }} {{ c.s_primerapellidocliente }}</td>
+                                                    <td>{{ c.s_email }}</td>
+                                                </tr>
+                                            {% empty %}
+                                                <tr><td colspan="3" class="text-center">Sin datos</td></tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-header bg-light">
+                                    Últimos Menús
+                                </div>
+                                <div class="card-body p-0">
+                                    <table class="table table-sm mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Título</th>
+                                                <th>Precio</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for m in ultimos_menus %}
+                                                <tr>
+                                                    <td>{{ m.id_menu }}</td>
+                                                    <td>{{ m.s_titulomenu }}</td>
+                                                    <td>${{ m.i_precio }}</td>
+                                                </tr>
+                                            {% empty %}
+                                                <tr><td colspan="3" class="text-center">Sin datos</td></tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Cocineros -->
+                <div class="tab-pane fade" id="nav-cocineros" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Gestión de Cocineros</h4>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalCrearCocinero">
+                            <i class="fas fa-plus"></i> Nuevo Cocinero
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="tablaCocineros">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Apellidos</th>
+                                    <th>Usuario</th>
+                                    <th>Estado</th>
+                                    <th>Servicio</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cocinero in cocineros %}
+                                <tr>
+                                    <td>{{ cocinero.id_usuario }}</td>
+                                    <td>{{ cocinero.s_nombreusuario }}</td>
+                                    <td>{{ cocinero.s_primerapellidousuario }} {{ cocinero.s_segundoapellidousuario }}</td>
+                                    <td>{{ cocinero.s_usuario }}</td>
+                                    <td>
+                                        {% if cocinero.b_activo %}
+                                            <span class="badge bg-success">Activo</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Inactivo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if cocinero.en_servicio %}
+                                            <span class="badge bg-success">En servicio</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Fuera</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary me-1 btn-editar-cocinero" 
+                                                data-id="{{ cocinero.id_usuario }}" 
+                                                data-nombre="{{ cocinero.s_nombreusuario }}" 
+                                                data-primer-apellido="{{ cocinero.s_primerapellidousuario }}" 
+                                                data-segundo-apellido="{{ cocinero.s_segundoapellidousuario }}" 
+                                                data-usuario="{{ cocinero.s_usuario }}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger btn-eliminar-cocinero" 
+                                                data-id="{{ cocinero.id_usuario }}" 
+                                                data-nombre="{{ cocinero.s_nombreusuario }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No hay cocineros registrados</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab Usuarios (general) -->
+                <div class="tab-pane fade" id="nav-usuarios" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Gestión de Usuarios</h4>
+                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalCrearUsuario">
+                            <i class="fas fa-plus"></i> Nuevo Usuario
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="tablaUsuarios">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Apellidos</th>
+                                    <th>Usuario</th>
+                                    <th>Perfil</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for u in usuarios_all %}
+                                <tr>
+                                    <td>{{ u.id_usuario }}</td>
+                                    <td>{{ u.s_nombreusuario }}</td>
+                                    <td>{{ u.s_primerapellidousuario }} {{ u.s_segundoapellidousuario }}</td>
+                                    <td>{{ u.s_usuario }}</td>
+                                    <td>
+                                        {% if u.fk_id_perfil %}
+                                            <span class="badge bg-secondary">{{ u.fk_id_perfil.s_nombreperfil }}</span>
+                                        {% else %}
+                                            <span class="badge bg-light text-dark">Sin perfil</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if u.b_activo %}
+                                            <span class="badge bg-success">Activo</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Inactivo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary me-1 btn-editar-usuario"
+                                                data-id="{{ u.id_usuario }}"
+                                                data-nombre="{{ u.s_nombreusuario }}"
+                                                data-primer-apellido="{{ u.s_primerapellidousuario }}"
+                                                data-segundo-apellido="{{ u.s_segundoapellidousuario }}"
+                                                data-usuario="{{ u.s_usuario }}"
+                                                data-perfil="{{ u.fk_id_perfil.id_perfil }}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger btn-eliminar-usuario"
+                                                data-id="{{ u.id_usuario }}"
+                                                data-nombre="{{ u.s_nombreusuario }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center">No hay usuarios</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab Menús -->
+                <div class="tab-pane fade" id="nav-menus" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Gestión de Menús</h4>
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalCrearMenu">
+                            <i class="fas fa-plus"></i> Nuevo Menú
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Imagen</th>
+                                    <th>Título</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>Tipo</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for menu in menus %}
+                                <tr>
+                                    <td>{{ menu.id_menu }}</td>
+                                    <td>
+                                        {% if menu.s_imagen %}
+                                            <img src="{{ menu.s_imagen.url }}" alt="{{ menu.s_titulomenu }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                        {% else %}
+                                            <img src="/static/index_img/default-menu.jpg" alt="Sin imagen" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ menu.s_titulomenu }}</td>
+                                    <td>{{ menu.s_descripcionmenu|truncatechars:50 }}</td>
+                                    <td>${{ menu.i_precio }}</td>
+                                    <td>{{ menu.s_tipomenu }}</td>
+                                    <td>
+                                        {% if menu.b_activo %}
+                                            <span class="badge bg-success">Activo</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Inactivo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary me-1 btn-editar-menu"
+                                                data-id="{{ menu.id_menu }}"
+                                                data-titulo="{{ menu.s_titulomenu }}"
+                                                data-descripcion="{{ menu.s_descripcionmenu }}"
+                                                data-precio="{{ menu.i_precio }}"
+                                                data-tipo="{{ menu.s_tipomenu }}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-warning me-1 btn-toggle-menu" data-id="{{ menu.id_menu }}" title="Activar/Desactivar">
+                                            <i class="fas fa-power-off"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger btn-eliminar-menu" data-id="{{ menu.id_menu }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="9" class="text-center">No hay menús registrados</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab Mesas -->
+                <div class="tab-pane fade" id="nav-mesas" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Gestión de Mesas</h4>
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalCrearMesa">
+                            <i class="fas fa-plus"></i> Nueva Mesa
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="tablaMesas">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Ubicación</th>
+                                    <th>Descripción</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for mesa in mesas %}
+                                <tr>
+                                    <td>{{ mesa.id_mesa }}</td>
+                                    <td>{{ mesa.s_nombremesa }}</td>
+                                    <td>{{ mesa.s_ubicacion|default:"Sin ubicación" }}</td>
+                                    <td>{{ mesa.s_descripcionmesa|truncatechars:50 }}</td>
+                                    <td>
+                                        {% if mesa.b_activo %}
+                                            <span class="badge bg-success">Activo</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Inactivo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary me-1 btn-editar-mesa" 
+                                                data-id="{{ mesa.id_mesa }}" 
+                                                data-nombre="{{ mesa.s_nombremesa }}" 
+                                                data-descripcion="{{ mesa.s_descripcionmesa }}" 
+                                                data-ubicacion="{{ mesa.s_ubicacion }}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger btn-eliminar-mesa" 
+                                                data-id="{{ mesa.id_mesa }}" 
+                                                data-nombre="{{ mesa.s_nombremesa }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No hay mesas registradas</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab Reservas -->
+                <div class="tab-pane fade" id="nav-reservas" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Gestión de Reservas</h4>
+                        <!-- Reservas: gestión futura en esta misma vista -->
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reserva in reservas %}
+                                <tr>
+                                    <td>{{ reserva.id_reserva }}</td>
+                                    <td>{{ reserva.fk_id_cliente.s_primernombrecliente }} {{ reserva.fk_id_cliente.s_primerapellidocliente }}</td>
+                                    <td>{{ reserva.d_fechainicio|date:"d/m/Y" }}</td>
+                                    <td>{{ reserva.d_fechainicio|time:"H:i" }}</td>
+                                    <td>
+                                        {% if reserva.b_activo %}
+                                            <span class="badge bg-success">Activa</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Cancelada</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="/admin/reserfast_app/tblreserva/{{ reserva.id_reserva }}/change/" class="btn btn-sm btn-primary me-1">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="/admin/reserfast_app/tblreserva/{{ reserva.id_reserva }}/delete/" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No hay reservas registradas</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- MODALES -->
+
+<!-- Modal Crear Garzón -->
+<div class="modal fade" id="modalCrearGarzon" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Crear Nuevo Garzón</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrearGarzon">
+                    <div class="mb-3">
+                        <label for="nombre_garzon" class="form-label">Nombre *</label>
+                        <input type="text" class="form-control" id="nombre_garzon" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="primer_apellido_garzon" class="form-label">Primer Apellido *</label>
+                        <input type="text" class="form-control" id="primer_apellido_garzon" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="segundo_apellido_garzon" class="form-label">Segundo Apellido</label>
+                        <input type="text" class="form-control" id="segundo_apellido_garzon">
+                    </div>
+                    <div class="mb-3">
+                        <label for="usuario_garzon" class="form-label">Usuario *</label>
+                        <input type="text" class="form-control" id="usuario_garzon" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password_garzon" class="form-label">Contraseña *</label>
+                        <input type="password" class="form-control" id="password_garzon" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="crearGarzon()">Crear Garzón</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Garzón -->
+<div class="modal fade" id="modalEditarGarzon" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Editar Garzón</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarGarzon">
+                    <input type="hidden" id="edit_garzon_id">
+                    <div class="mb-3">
+                        <label for="edit_nombre_garzon" class="form-label">Nombre *</label>
+                        <input type="text" class="form-control" id="edit_nombre_garzon" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_primer_apellido_garzon" class="form-label">Primer Apellido *</label>
+                        <input type="text" class="form-control" id="edit_primer_apellido_garzon" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_segundo_apellido_garzon" class="form-label">Segundo Apellido</label>
+                        <input type="text" class="form-control" id="edit_segundo_apellido_garzon">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_usuario_garzon" class="form-label">Usuario *</label>
+                        <input type="text" class="form-control" id="edit_usuario_garzon" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_password_garzon" class="form-label">Nueva Contraseña (opcional)</label>
+                        <input type="password" class="form-control" id="edit_password_garzon">
+                        <small class="text-muted">Deje en blanco si no desea cambiar la contraseña</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="actualizarGarzon()">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Crear Cocinero -->
+<div class="modal fade" id="modalCrearCocinero" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title">Crear Nuevo Cocinero</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrearCocinero">
+                    <div class="mb-3">
+                        <label for="nombre_cocinero" class="form-label">Nombre *</label>
+                        <input type="text" class="form-control" id="nombre_cocinero" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="primer_apellido_cocinero" class="form-label">Primer Apellido *</label>
+                        <input type="text" class="form-control" id="primer_apellido_cocinero" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="segundo_apellido_cocinero" class="form-label">Segundo Apellido</label>
+                        <input type="text" class="form-control" id="segundo_apellido_cocinero">
+                    </div>
+                    <div class="mb-3">
+                        <label for="usuario_cocinero" class="form-label">Usuario *</label>
+                        <input type="text" class="form-control" id="usuario_cocinero" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password_cocinero" class="form-label">Contraseña *</label>
+                        <input type="password" class="form-control" id="password_cocinero" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning" onclick="crearCocinero()">Crear Cocinero</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Cocinero -->
+<div class="modal fade" id="modalEditarCocinero" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Editar Cocinero</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarCocinero">
+                    <input type="hidden" id="edit_cocinero_id">
+                    <div class="mb-3">
+                        <label for="edit_nombre_cocinero" class="form-label">Nombre *</label>
+                        <input type="text" class="form-control" id="edit_nombre_cocinero" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_primer_apellido_cocinero" class="form-label">Primer Apellido *</label>
+                        <input type="text" class="form-control" id="edit_primer_apellido_cocinero" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_segundo_apellido_cocinero" class="form-label">Segundo Apellido</label>
+                        <input type="text" class="form-control" id="edit_segundo_apellido_cocinero">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_usuario_cocinero" class="form-label">Usuario *</label>
+                        <input type="text" class="form-control" id="edit_usuario_cocinero" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_password_cocinero" class="form-label">Nueva Contraseña (opcional)</label>
+                        <input type="password" class="form-control" id="edit_password_cocinero">
+                        <small class="text-muted">Deje en blanco si no desea cambiar la contraseña</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="actualizarCocinero()">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Crear Mesa -->
+<div class="modal fade" id="modalCrearMesa" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-white">
+                <h5 class="modal-title">Crear Nueva Mesa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrearMesa">
+                    <div class="mb-3">
+                        <label for="nombre_mesa" class="form-label">Nombre de la Mesa *</label>
+                        <input type="text" class="form-control" id="nombre_mesa" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ubicacion_mesa" class="form-label">Ubicación</label>
+                        <input type="text" class="form-control" id="ubicacion_mesa" placeholder="Ej: Sala principal, Terraza, etc.">
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion_mesa" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion_mesa" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-secondary" onclick="crearMesa()">Crear Mesa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Mesa -->
+<div class="modal fade" id="modalEditarMesa" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Editar Mesa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarMesa">
+                    <input type="hidden" id="edit_mesa_id">
+                    <div class="mb-3">
+                        <label for="edit_nombre_mesa" class="form-label">Nombre de la Mesa *</label>
+                        <input type="text" class="form-control" id="edit_nombre_mesa" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_ubicacion_mesa" class="form-label">Ubicación</label>
+                        <input type="text" class="form-control" id="edit_ubicacion_mesa" placeholder="Ej: Sala principal, Terraza, etc.">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_descripcion_mesa" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="edit_descripcion_mesa" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="actualizarMesa()">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Crear Usuario -->
+<div class="modal fade" id="modalCrearUsuario" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">Crear Nuevo Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrearUsuario">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre *</label>
+                        <input type="text" class="form-control" id="usuario_nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Primer Apellido *</label>
+                        <input type="text" class="form-control" id="usuario_primer_ap" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Segundo Apellido</label>
+                        <input type="text" class="form-control" id="usuario_segundo_ap">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Usuario *</label>
+                        <input type="text" class="form-control" id="usuario_login" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña *</label>
+                        <input type="password" class="form-control" id="usuario_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Perfil *</label>
+                        <select class="form-select" id="usuario_perfil" required>
+                            <option value="" selected disabled>Seleccione perfil</option>
+                            {% for p in perfiles %}
+                                <option value="{{ p.id_perfil }}">{{ p.s_nombreperfil }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-dark" onclick="crearUsuario()">Crear Usuario</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Usuario -->
+<div class="modal fade" id="modalEditarUsuario" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Editar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarUsuario">
+                    <input type="hidden" id="edit_usuario_id">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre *</label>
+                        <input type="text" class="form-control" id="edit_usuario_nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Primer Apellido *</label>
+                        <input type="text" class="form-control" id="edit_usuario_primer_ap" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Segundo Apellido</label>
+                        <input type="text" class="form-control" id="edit_usuario_segundo_ap">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Usuario *</label>
+                        <input type="text" class="form-control" id="edit_usuario_login" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nueva Contraseña (opcional)</label>
+                        <input type="password" class="form-control" id="edit_usuario_password">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Perfil</label>
+                        <select class="form-select" id="edit_usuario_perfil">
+                            <option value="">(Sin cambio)</option>
+                            {% for p in perfiles %}
+                                <option value="{{ p.id_perfil }}">{{ p.s_nombreperfil }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="actualizarUsuario()">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Crear Menú -->
+<div class="modal fade" id="modalCrearMenu" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Crear Nuevo Menú</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrearMenu" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Título *</label>
+                        <input type="text" class="form-control" id="menu_titulo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción *</label>
+                        <textarea class="form-control" id="menu_descripcion" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Precio *</label>
+                        <input type="number" class="form-control" id="menu_precio" min="0" step="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Categoría *</label>
+                        <input type="text" class="form-control" id="menu_tipo" placeholder="Ej: entrada, comida rápida, almuerzo, bebida" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Imagen (opcional)</label>
+                        <input type="file" class="form-control" id="menu_imagen" accept="image/*">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-info" onclick="crearMenu()">Crear Menú</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Menú -->
+<div class="modal fade" id="modalEditarMenu" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Editar Menú</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarMenu" enctype="multipart/form-data">
+                    <input type="hidden" id="edit_menu_id">
+                    <div class="mb-3">
+                        <label class="form-label">Título *</label>
+                        <input type="text" class="form-control" id="edit_menu_titulo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción *</label>
+                        <textarea class="form-control" id="edit_menu_descripcion" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Precio *</label>
+                        <input type="number" class="form-control" id="edit_menu_precio" min="0" step="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Categoría *</label>
+                        <input type="text" class="form-control" id="edit_menu_tipo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Imagen (opcional)</label>
+                        <input type="file" class="form-control" id="edit_menu_imagen" accept="image/*">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="actualizarMenu()">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+<script>
+// ================= FUNCIONES AUXILIARES =================
+
+function showAlert(message, type = 'success') {
+    const alertContainer = document.getElementById('alertContainer');
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    alertContainer.appendChild(alertDiv);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
+    }, 5000);
+}
+
+function getCsrfToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+
+// ================= FUNCIONES GARZONES =================
+
+function crearGarzon() {
+    const data = {
+        s_nombreusuario: document.getElementById('nombre_garzon').value,
+        s_primerapellidousuario: document.getElementById('primer_apellido_garzon').value,
+        s_segundoapellidousuario: document.getElementById('segundo_apellido_garzon').value,
+        s_usuario: document.getElementById('usuario_garzon').value,
+        s_contrasenausuario: document.getElementById('password_garzon').value
+    };
+    
+    fetch('/reserfast/ajax/crear_garzon/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert(data.mensaje, 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modalCrearGarzon')).hide();
+            location.reload(); // Recargar para mostrar el nuevo garzón
+        } else {
+            showAlert(data.mensaje, 'danger');
+        }
+    })
+    .catch(error => {
+        showAlert('Error al crear garzón', 'danger');
+        console.error('Error:', error);
+    });
+}
+
+function editarGarzon(id, nombre, primerApellido, segundoApellido, usuario) {
+    document.getElementById('edit_garzon_id').value = id;
+    document.getElementById('edit_nombre_garzon').value = nombre;
+    document.getElementById('edit_primer_apellido_garzon').value = primerApellido;
+    document.getElementById('edit_segundo_apellido_garzon').value = segundoApellido;
+    document.getElementById('edit_usuario_garzon').value = usuario;
+    document.getElementById('edit_password_garzon').value = '';
+    
+    new bootstrap.Modal(document.getElementById('modalEditarGarzon')).show();
+}
+
+function actualizarGarzon() {
+    const id = document.getElementById('edit_garzon_id').value;
+    const data = {
+        s_nombreusuario: document.getElementById('edit_nombre_garzon').value,
+        s_primerapellidousuario: document.getElementById('edit_primer_apellido_garzon').value,
+        s_segundoapellidousuario: document.getElementById('edit_segundo_apellido_garzon').value,
+        s_usuario: document.getElementById('edit_usuario_garzon').value
+    };
+    
+    const password = document.getElementById('edit_password_garzon').value;
+    if (password) {
+        data.s_contrasenausuario = password;
+    }
+    
+    fetch(`/reserfast/ajax/editar_garzon/${id}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert(data.mensaje, 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modalEditarGarzon')).hide();
+            location.reload();
+        } else {
+            showAlert(data.mensaje, 'danger');
+        }
+    })
+    .catch(error => {
+        showAlert('Error al actualizar garzón', 'danger');
+        console.error('Error:', error);
+    });
+}
+
+function eliminarGarzon(id, nombre) {
+    if (confirm(`¿Está seguro de eliminar al garzón ${nombre}?`)) {
+        fetch(`/reserfast/ajax/eliminar_garzon/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert(data.mensaje, 'success');
+                location.reload();
+            } else {
+                showAlert(data.mensaje, 'danger');
+            }
+        })
+        .catch(error => {
+            showAlert('Error al eliminar garzón', 'danger');
+            console.error('Error:', error);
+        });
+    }
+}
+
+// ================= FUNCIONES COCINEROS =================
+
+function crearCocinero() {
+    const data = {
+        s_nombreusuario: document.getElementById('nombre_cocinero').value,
+        s_primerapellidousuario: document.getElementById('primer_apellido_cocinero').value,
+        s_segundoapellidousuario: document.getElementById('segundo_apellido_cocinero').value,
+        s_usuario: document.getElementById('usuario_cocinero').value,
+        s_contrasenausuario: document.getElementById('password_cocinero').value
+    };
+    
+    fetch('/reserfast/ajax/crear_cocinero/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert(data.mensaje, 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modalCrearCocinero')).hide();
+            location.reload();
+        } else {
+            showAlert(data.mensaje, 'danger');
+        }
+    })
+    .catch(error => {
+        showAlert('Error al crear cocinero', 'danger');
+        console.error('Error:', error);
+    });
+}
+
+function editarCocinero(id, nombre, primerApellido, segundoApellido, usuario) {
+    document.getElementById('edit_cocinero_id').value = id;
+    document.getElementById('edit_nombre_cocinero').value = nombre;
+    document.getElementById('edit_primer_apellido_cocinero').value = primerApellido;
+    document.getElementById('edit_segundo_apellido_cocinero').value = segundoApellido;
+    document.getElementById('edit_usuario_cocinero').value = usuario;
+    document.getElementById('edit_password_cocinero').value = '';
+    
+    new bootstrap.Modal(document.getElementById('modalEditarCocinero')).show();
+}
+
+function actualizarCocinero() {
+    const id = document.getElementById('edit_cocinero_id').value;
+    const data = {
+        s_nombreusuario: document.getElementById('edit_nombre_cocinero').value,
+        s_primerapellidousuario: document.getElementById('edit_primer_apellido_cocinero').value,
+        s_segundoapellidousuario: document.getElementById('edit_segundo_apellido_cocinero').value,
+        s_usuario: document.getElementById('edit_usuario_cocinero').value
+    };
+    
+    const password = document.getElementById('edit_password_cocinero').value;
+    if (password) {
+        data.s_contrasenausuario = password;
+    }
+    
+    fetch(`/reserfast/ajax/editar_cocinero/${id}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert(data.mensaje, 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modalEditarCocinero')).hide();
+            location.reload();
+        } else {
+            showAlert(data.mensaje, 'danger');
+        }
+    })
+    .catch(error => {
+        showAlert('Error al actualizar cocinero', 'danger');
+        console.error('Error:', error);
+    });
+}
+
+function eliminarCocinero(id, nombre) {
+    if (confirm(`¿Está seguro de eliminar al cocinero ${nombre}?`)) {
+        fetch(`/reserfast/ajax/eliminar_cocinero/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert(data.mensaje, 'success');
+                location.reload();
+            } else {
+                showAlert(data.mensaje, 'danger');
+            }
+        })
+        .catch(error => {
+            showAlert('Error al eliminar cocinero', 'danger');
+            console.error('Error:', error);
+        });
+    }
+}
+
+// ================= FUNCIONES MESAS =================
+
+function crearMesa() {
+    const data = {
+        s_nombremesa: document.getElementById('nombre_mesa').value,
+        s_ubicacion: document.getElementById('ubicacion_mesa').value,
+        s_descripcionmesa: document.getElementById('descripcion_mesa').value
+    };
+    
+    fetch('/reserfast/ajax/crear_mesa/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert(data.mensaje, 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modalCrearMesa')).hide();
+            location.reload();
+        } else {
+            showAlert(data.mensaje, 'danger');
+        }
+    })
+    .catch(error => {
+        showAlert('Error al crear mesa', 'danger');
+        console.error('Error:', error);
+    });
+}
+
+// ================= FUNCIONES USUARIOS (general) =================
+function crearUsuario() {
+    const data = {
+        s_nombreusuario: document.getElementById('usuario_nombre').value,
+        s_primerapellidousuario: document.getElementById('usuario_primer_ap').value,
+        s_segundoapellidousuario: document.getElementById('usuario_segundo_ap').value,
+        s_usuario: document.getElementById('usuario_login').value,
+        s_contrasenausuario: document.getElementById('usuario_password').value,
+        perfil: document.getElementById('usuario_perfil').value
+    };
+    fetch('/reserfast/ajax/crear_usuario/', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() }, body: JSON.stringify(data) })
+        .then(r => r.json()).then(d => { if (d.success) { showAlert(d.mensaje); bootstrap.Modal.getInstance(document.getElementById('modalCrearUsuario')).hide(); location.reload(); } else { showAlert(d.mensaje, 'danger'); } })
+        .catch(() => showAlert('Error al crear usuario', 'danger'));
+}
+function editarUsuario(id, nombre, pAp, sAp, usuario, perfilId) {
+    document.getElementById('edit_usuario_id').value = id;
+    document.getElementById('edit_usuario_nombre').value = nombre;
+    document.getElementById('edit_usuario_primer_ap').value = pAp;
+    document.getElementById('edit_usuario_segundo_ap').value = sAp || '';
+    document.getElementById('edit_usuario_login').value = usuario;
+    document.getElementById('edit_usuario_password').value = '';
+    document.getElementById('edit_usuario_perfil').value = perfilId || '';
+    new bootstrap.Modal(document.getElementById('modalEditarUsuario')).show();
+}
+function actualizarUsuario() {
+    const id = document.getElementById('edit_usuario_id').value;
+    const data = {
+        s_nombreusuario: document.getElementById('edit_usuario_nombre').value,
+        s_primerapellidousuario: document.getElementById('edit_usuario_primer_ap').value,
+        s_segundoapellidousuario: document.getElementById('edit_usuario_segundo_ap').value,
+        s_usuario: document.getElementById('edit_usuario_login').value,
+        s_contrasenausuario: document.getElementById('edit_usuario_password').value,
+        perfil: document.getElementById('edit_usuario_perfil').value
+    };
+    if (!data.s_contrasenausuario) delete data.s_contrasenausuario;
+    if (!data.perfil) delete data.perfil;
+    fetch(`/reserfast/ajax/editar_usuario/${id}/`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() }, body: JSON.stringify(data) })
+        .then(r => r.json()).then(d => { if (d.success) { showAlert(d.mensaje); bootstrap.Modal.getInstance(document.getElementById('modalEditarUsuario')).hide(); location.reload(); } else { showAlert(d.mensaje, 'danger'); } })
+        .catch(() => showAlert('Error al actualizar usuario', 'danger'));
+}
+function eliminarUsuario(id, nombre) {
+    if (confirm(`¿Está seguro de eliminar al usuario ${nombre}?`)) {
+        fetch(`/reserfast/ajax/eliminar_usuario/${id}/`, { method: 'POST', headers: { 'X-CSRFToken': getCsrfToken() } })
+            .then(r => r.json()).then(d => { if (d.success) { showAlert(d.mensaje); location.reload(); } else { showAlert(d.mensaje, 'danger'); } })
+            .catch(() => showAlert('Error al eliminar usuario', 'danger'));
+    }
+}
+
+// ================= FUNCIONES MENUS =================
+function crearMenu() {
+    const formData = new FormData();
+    formData.append('s_titulomenu', document.getElementById('menu_titulo').value);
+    formData.append('s_descripcionmenu', document.getElementById('menu_descripcion').value);
+    formData.append('i_precio', document.getElementById('menu_precio').value);
+    formData.append('s_tipomenu', document.getElementById('menu_tipo').value);
+    const img = document.getElementById('menu_imagen').files[0];
+    if (img) formData.append('s_imagen', img);
+    fetch('/reserfast/ajax/crear_menu/', { method: 'POST', headers: { 'X-CSRFToken': getCsrfToken() }, body: formData })
+        .then(r => r.json()).then(d => { if (d.success) { showAlert(d.mensaje); bootstrap.Modal.getInstance(document.getElementById('modalCrearMenu')).hide(); location.reload(); } else { showAlert(d.mensaje, 'danger'); } })
+        .catch(() => showAlert('Error al crear menú', 'danger'));
+}
+function editarMenu(id, titulo, descripcion, precio, tipo) {
+    document.getElementById('edit_menu_id').value = id;
+    document.getElementById('edit_menu_titulo').value = titulo;
+    document.getElementById('edit_menu_descripcion').value = descripcion;
+    document.getElementById('edit_menu_precio').value = precio;
+    document.getElementById('edit_menu_tipo').value = tipo;
+    document.getElementById('edit_menu_imagen').value = '';
+    new bootstrap.Modal(document.getElementById('modalEditarMenu')).show();
+}
+function actualizarMenu() {
+    const id = document.getElementById('edit_menu_id').value;
+    const formData = new FormData();
+    formData.append('s_titulomenu', document.getElementById('edit_menu_titulo').value);
+    formData.append('s_descripcionmenu', document.getElementById('edit_menu_descripcion').value);
+    formData.append('i_precio', document.getElementById('edit_menu_precio').value);
+    formData.append('s_tipomenu', document.getElementById('edit_menu_tipo').value);
+    const img = document.getElementById('edit_menu_imagen').files[0];
+    if (img) formData.append('s_imagen', img);
+    fetch(`/reserfast/ajax/editar_menu_cocina/${id}/`, { method: 'POST', headers: { 'X-CSRFToken': getCsrfToken() }, body: formData })
+        .then(r => r.json()).then(d => { if (d.success) { showAlert(d.mensaje); bootstrap.Modal.getInstance(document.getElementById('modalEditarMenu')).hide(); location.reload(); } else { showAlert(d.mensaje, 'danger'); } })
+        .catch(() => showAlert('Error al actualizar menú', 'danger'));
+}
+function toggleMenu(id) {
+    fetch(`/reserfast/ajax/toggle_menu_cocina/${id}/`, { method: 'POST', headers: { 'X-CSRFToken': getCsrfToken() } })
+        .then(r => r.json()).then(d => { if (d.success) { showAlert(d.mensaje); location.reload(); } else { showAlert(d.mensaje, 'danger'); } })
+        .catch(() => showAlert('Error al cambiar estado de menú', 'danger'));
+}
+function eliminarMenu(id) {
+    if (confirm('¿Está seguro de eliminar este menú?')) {
+        fetch(`/reserfast/ajax/eliminar_menu_cocina/${id}/`, { method: 'POST', headers: { 'X-CSRFToken': getCsrfToken() } })
+            .then(r => r.json()).then(d => { if (d.success) { showAlert(d.mensaje); location.reload(); } else { showAlert(d.mensaje, 'danger'); } })
+            .catch(() => showAlert('Error al eliminar menú', 'danger'));
+    }
+}
+function editarMesa(id, nombre, descripcion, ubicacion) {
+    document.getElementById('edit_mesa_id').value = id;
+    document.getElementById('edit_nombre_mesa').value = nombre;
+    document.getElementById('edit_descripcion_mesa').value = descripcion;
+    document.getElementById('edit_ubicacion_mesa').value = ubicacion || '';
+    
+    new bootstrap.Modal(document.getElementById('modalEditarMesa')).show();
+}
+
+function actualizarMesa() {
+    const id = document.getElementById('edit_mesa_id').value;
+    const data = {
+        s_nombremesa: document.getElementById('edit_nombre_mesa').value,
+        s_descripcionmesa: document.getElementById('edit_descripcion_mesa').value,
+        s_ubicacion: document.getElementById('edit_ubicacion_mesa').value
+    };
+    
+    fetch(`/reserfast/ajax/editar_mesa/${id}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert(data.mensaje, 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modalEditarMesa')).hide();
+            location.reload();
+        } else {
+            showAlert(data.mensaje, 'danger');
+        }
+    })
+    .catch(error => {
+        showAlert('Error al actualizar mesa', 'danger');
+        console.error('Error:', error);
+    });
+}
+
+function eliminarMesa(id, nombre) {
+    if (confirm(`¿Está seguro de eliminar la mesa ${nombre}?`)) {
+        fetch(`/reserfast/ajax/eliminar_mesa/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert(data.mensaje, 'success');
+                location.reload();
+            } else {
+                showAlert(data.mensaje, 'danger');
+            }
+        })
+        .catch(error => {
+            showAlert('Error al eliminar mesa', 'danger');
+            console.error('Error:', error);
+        });
+    }
+}
+
+// Limpiar formularios cuando se cierran los modales
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar AOS para animaciones
+    AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100
+    });
+
+    // Event listeners para botones de garzones, cocineros, usuarios y mesas/menús
+    document.addEventListener('click', function(e) {
+        // Botones de garzones
+        if (e.target.closest('.btn-editar-garzon')) {
+            const button = e.target.closest('.btn-editar-garzon');
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            const primerApellido = button.getAttribute('data-primer-apellido');
+            const segundoApellido = button.getAttribute('data-segundo-apellido');
+            const usuario = button.getAttribute('data-usuario');
+            editarGarzon(id, nombre, primerApellido, segundoApellido, usuario);
+        }
+        
+        if (e.target.closest('.btn-eliminar-garzon')) {
+            const button = e.target.closest('.btn-eliminar-garzon');
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            eliminarGarzon(id, nombre);
+        }
+        
+        // Botones de cocineros
+        if (e.target.closest('.btn-editar-cocinero')) {
+            const button = e.target.closest('.btn-editar-cocinero');
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            const primerApellido = button.getAttribute('data-primer-apellido');
+            const segundoApellido = button.getAttribute('data-segundo-apellido');
+            const usuario = button.getAttribute('data-usuario');
+            editarCocinero(id, nombre, primerApellido, segundoApellido, usuario);
+        }
+        
+        if (e.target.closest('.btn-eliminar-cocinero')) {
+            const button = e.target.closest('.btn-eliminar-cocinero');
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            eliminarCocinero(id, nombre);
+        }
+        
+        // Botones de mesa
+        if (e.target.closest('.btn-editar-mesa')) {
+            const button = e.target.closest('.btn-editar-mesa');
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            const descripcion = button.getAttribute('data-descripcion');
+            const ubicacion = button.getAttribute('data-ubicacion');
+            editarMesa(id, nombre, descripcion, ubicacion);
+        }
+        
+        if (e.target.closest('.btn-eliminar-mesa')) {
+            const button = e.target.closest('.btn-eliminar-mesa');
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            eliminarMesa(id, nombre);
+        }
+        // Botones de usuarios generales
+        if (e.target.closest('.btn-editar-usuario')) {
+            const b = e.target.closest('.btn-editar-usuario');
+            editarUsuario(
+                b.getAttribute('data-id'),
+                b.getAttribute('data-nombre'),
+                b.getAttribute('data-primer-apellido'),
+                b.getAttribute('data-segundo-apellido'),
+                b.getAttribute('data-usuario'),
+                b.getAttribute('data-perfil')
+            );
+        }
+        if (e.target.closest('.btn-eliminar-usuario')) {
+            const b = e.target.closest('.btn-eliminar-usuario');
+            eliminarUsuario(b.getAttribute('data-id'), b.getAttribute('data-nombre'));
+        }
+
+        // Botones de menús
+        if (e.target.closest('.btn-editar-menu')) {
+            const b = e.target.closest('.btn-editar-menu');
+            editarMenu(
+                b.getAttribute('data-id'),
+                b.getAttribute('data-titulo'),
+                b.getAttribute('data-descripcion'),
+                b.getAttribute('data-precio'),
+                b.getAttribute('data-tipo')
+            );
+        }
+        if (e.target.closest('.btn-toggle-menu')) {
+            const b = e.target.closest('.btn-toggle-menu');
+            toggleMenu(b.getAttribute('data-id'));
+        }
+        if (e.target.closest('.btn-eliminar-menu')) {
+            const b = e.target.closest('.btn-eliminar-menu');
+            eliminarMenu(b.getAttribute('data-id'));
+        }
+    });
+
+    // Limpiar formularios cuando se cierran los modales
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.addEventListener('hidden.bs.modal', function() {
+            const forms = modal.querySelectorAll('form');
+            forms.forEach(form => form.reset());
+        });
+    });
+
+    // (JS simplificado)
+});
+</script>
+
+<style>
+.card-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+.nav-pills .nav-link {
+    transition: all 0.3s ease;
+}
+
+.nav-pills .nav-link:hover {
+    transform: translateY(-2px);
+}
+
+.nav-pills .nav-link.active {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    transform: scale(1.01);
+    transition: all 0.2s ease;
+}
+
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.modal-content {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    border-radius: 15px 15px 0 0;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.badge {
+    font-size: 0.75em;
+    padding: 0.5em 0.75em;
+}
+
+@media (max-width: 768px) {
+    /* estilos responsive mínimos */
+}
+</style>
+
+{% endblock body-admin %}

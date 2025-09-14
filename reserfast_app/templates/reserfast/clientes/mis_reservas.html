@@ -1,0 +1,237 @@
+{% extends 'reserfast/clientes/base_cliente.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Mis Reservas</h2>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <div class="mb-3">
+                <a href="{% url 'reserfast:crear_reserva' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nueva Reserva
+                </a>
+                <a href="{% url 'reserfast:index_cliente' %}" class="btn btn-secondary">
+                    <i class="fas fa-home"></i> Volver al Inicio
+                </a>
+            </div>
+            
+            {% if debug_info and debug_info.total_reservas_cliente == 0 %}
+                <div class="alert alert-info">
+                    <h5>Información de Diagnóstico:</h5>
+                    <p><strong>Cliente ID:</strong> {{ debug_info.cliente_id }}</p>
+                    <p><strong>Reservas del cliente:</strong> {{ debug_info.total_reservas_cliente }}</p>
+                    <p><strong>Total reservas en sistema:</strong> {{ debug_info.total_reservas_sistema }}</p>
+                </div>
+            {% endif %}
+
+            {% if tiene_reservas %}
+                {% if reservas_futuras %}
+                <h4 class="mb-3 text-primary">
+                    <i class="fas fa-calendar-alt"></i> Tus Reservas Futuras ({{ reservas_futuras|length }})
+                </h4>
+                
+                <div class="row">
+                    {% for detalle in reservas_futuras %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-primary h-100">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Reserva #{{ detalle.reserva.id_reserva }}</h5>
+                                <span class="badge bg-light text-primary">{{ detalle.estado }}</span>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Fecha:</strong> {{ detalle.reserva.d_fechainicio|date:"d/m/Y" }}</p>
+                                <p><strong>Mesa:</strong> {{ detalle.mesa.s_nombremesa|default:"Sin asignar" }}</p>
+                                <p><strong>Total:</strong> ${{ detalle.reserva.i_totalreserva|floatformat:0 }}</p>
+                                
+                                {% if detalle.menus %}
+                                <h6>Menús seleccionados:</h6>
+                                <ul class="list-unstyled">
+                                    {% for menu in detalle.menus %}
+                                    <li><i class="fas fa-utensils"></i> {{ menu.s_titulomenu }} - ${{ menu.i_precio|floatformat:0 }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                                
+                                <div class="btn-group mt-3">
+                                    <a href="{% url 'reserfast:editar_reserva' detalle.reserva.id_reserva %}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    <a href="{% url 'reserfast:eliminar_reserva' detalle.reserva.id_reserva %}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if reservas_pasadas %}
+                <h4 class="mb-3 text-secondary">
+                    <i class="fas fa-history"></i> Historial de Reservas
+                </h4>
+                <div class="row">
+                    {% for detalle in reservas_pasadas %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card {% if detalle.reserva.b_activo %}border-secondary{% else %}border-danger{% endif %} h-100">
+                            <div class="card-header {% if detalle.reserva.b_activo %}bg-secondary{% else %}bg-danger{% endif %} text-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Reserva #{{ detalle.reserva.id_reserva }}</h5>
+                                <span class="badge bg-light {% if detalle.reserva.b_activo %}text-secondary{% else %}text-danger{% endif %}">{{ detalle.estado }}</span>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Fecha:</strong> {{ detalle.reserva.d_fechainicio|date:"d/m/Y" }}</p>
+                                <p><strong>Mesa:</strong> {{ detalle.mesa.s_nombremesa|default:"Sin asignar" }}</p>
+                                <p><strong>Total:</strong> ${{ detalle.reserva.i_totalreserva|floatformat:0 }}</p>
+                                
+                                {% if detalle.menus %}
+                                <h6>Menús seleccionados:</h6>
+                                <ul class="list-unstyled">
+                                    {% for menu in detalle.menus %}
+                                    <li><i class="fas fa-utensils"></i> {{ menu.s_titulomenu }} - ${{ menu.i_precio|floatformat:0 }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                                
+                                {% if detalle.reserva.b_activo %}
+                                <div class="btn-group mt-3">
+                                    <a href="{% url 'reserfast:editar_reserva' detalle.reserva.id_reserva %}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    <a href="{% url 'reserfast:eliminar_reserva' detalle.reserva.id_reserva %}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-calendar-times fa-5x text-muted mb-3"></i>
+                    <h4 class="text-muted">No tienes reservas</h4>
+                    <p class="text-muted">Aún no has realizado ninguna reserva.</p>
+                    <a href="{% url 'reserfast:crear_reserva' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Crear mi primera reserva
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal para detalles de reserva -->
+<div class="modal fade" id="detalleReservaModal" tabindex="-1" aria-labelledby="detalleReservaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detalleReservaModalLabel">Detalles de Reserva</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <p class="mt-2">Cargando detalles...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript mejorado para funcionalidad de detalles -->
+<script>
+// Función mejorada para ver detalles de reserva
+function verDetalleReserva(reservaId) {
+    const modal = new bootstrap.Modal(document.getElementById('detalleReservaModal'));
+    const modalBody = document.getElementById('modalBody');
+    
+    // Mostrar modal
+    modal.show();
+    
+    // Cargar detalles
+    fetch(`/detalle_reserva_ajax/?reserva_id=${reservaId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const reserva = data.reserva;
+                let html = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Información General</h6>
+                            <p><strong>Reserva #:</strong> ${reserva.id}</p>
+                            <p><strong>Fecha:</strong> ${reserva.fecha}</p>
+                            <p><strong>Mesa:</strong> ${reserva.mesa}</p>
+                            <p><strong>Total:</strong> $${reserva.total.toLocaleString()}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Menús Seleccionados</h6>
+                            <ul class="list-unstyled">
+                `;
+                
+                reserva.menus.forEach(menu => {
+                    html += `<li><i class="fas fa-utensils"></i> ${menu.nombre} - $${menu.precio.toLocaleString()}</li>`;
+                });
+                
+                html += `
+                            </ul>
+                        </div>
+                    </div>
+                `;
+                
+                modalBody.innerHTML = html;
+            } else {
+                modalBody.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i> ${data.error || 'Error al cargar los detalles'}
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            modalBody.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i> Error al cargar los detalles de la reserva
+                </div>
+            `;
+        });
+}
+
+// Función para confirmar eliminación
+function confirmarEliminacion(reservaId) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta reserva?')) {
+        // Redirigir a la vista de eliminación
+        window.location.href = `/eliminar_reserva/${reservaId}/`;
+    }
+}
+
+// Auto-hide alerts after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert-dismissible');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base_garzon.html" %}
+
+{% load static %}
+
+{% block title-admin %} Crear mesas {% endblock title-admin %}
+
+{% block body %}
+
+<div class="user-creation-container" style="background: rgba(255, 255, 255, 0.8); border-radius: 15px; padding: 20px;">
+    <!-- La URL cambia dependiendo de si estamos creando o editando un usuario -->
+    <form method="POST">
+        {% csrf_token %}
+        {% comment %} {{ form.as_p }} > con esto creamos inmediatamente el formulario pero sin diseño como uno desee {% endcomment %}
+
+        <div class="form-outline mb-4">
+            {{ form.s_nombreusuario }}
+            <label class="form-label" for="{{ form.s_nombreusuario.id_for_label }}">Nombre</label>
+        </div>
+    
+        <!-- El texto del botón cambia dependiendo de la acción -->
+        <button type="submit" class="btn btn-primary">Crear Usuario</button>
+    </form>
+</div>
+
+{% endblock body %}

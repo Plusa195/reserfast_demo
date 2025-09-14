@@ -1,0 +1,48 @@
+{% extends 'reserfast/admin/base_admin.html' %}
+{% load static %}
+
+{% block title-admin %} Jefes Cocina {% endblock title-admin %}
+
+{% block body-admin %}
+    <div class="elegant-table-container">
+        <h3> Jefes de Cocina </h3>
+        <br>
+        <table class="elegant-table">
+            <thead>
+                <tr>
+                    <th class ="columna">ID</th>
+                    <th class ="columna">Nombre</th>
+                    <th class ="columna">Primer Apellido</th>
+                    <th class ="columna">Segundo Apellido</th>
+                    <th class ="columna">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cocina in cocineros %}
+                    <tr>
+                        <td class="fila">{{ cocina.id_usuario }}</td>
+                        <td class="fila">{{ cocina.s_nombreusuario }}</td>
+                        <td class="fila">{{ cocina.s_primerapellidousuario }}</td>
+                        <td class="fila">{{ cocina.s_segundoapellidousuario }}</td>
+                        <td class="fila"> 
+                            <form method="post" action="{% url 'reserfast:eliminar_usuarios_cocina' cocina.id_usuario %}">
+                            {% csrf_token %}
+                            <button type="submit" class="remove-button" style="background: none; border: none;" title="Eliminar">
+                                <img src="{% static 'index_img/remove.png' %}" style="background-color: transparent" alt="Eliminar">
+                            </button>
+                          </form>  
+
+                            <a href="{% url 'reserfast:actualizar_usuarios_cocina' cocina.id_usuario %}">
+                                <img src="{% static 'index_img/pen.png' %}" alt="Editar">
+                            </a>
+                        </td>
+                        {% comment %} <td class="fila>"> <button class="button btn-primary">Modificar </button> </td>   {% endcomment %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+           
+        </table>
+        <a href="{% url 'reserfast:crear_usuarios_cocina' %}" class="button btn-success agregar-cocina">Agregar</a>
+    </div>
+  
+{% endblock body-admin %}

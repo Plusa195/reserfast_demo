@@ -1,0 +1,40 @@
+{% extends 'reserfast/admin/base_admin.html' %}
+
+{% block title-admin %}Editar Perfil Empleado{% endblock %}
+
+{% block body-admin %}
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="fas fa-user-cog me-2"></i>Editar Perfil</h5>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">{{ form.s_nombreusuario.label_tag }}{{ form.s_nombreusuario }}</div>
+              <div class="col-md-6">{{ form.s_primerapellidousuario.label_tag }}{{ form.s_primerapellidousuario }}</div>
+              <div class="col-md-6">{{ form.s_segundoapellidousuario.label_tag }}{{ form.s_segundoapellidousuario }}</div>
+              <div class="col-md-6">{{ form.s_usuario.label_tag }}{{ form.s_usuario }}</div>
+              <div class="col-md-6">{{ form.fk_id_genero.label_tag }}{{ form.fk_id_genero }}</div>
+              <div class="col-12"><hr></div>
+              <div class="col-md-6">{{ form.contrasena_actual.label_tag }}{{ form.contrasena_actual }}</div>
+              <div class="col-md-6">{{ form.nueva_contrasena.label_tag }}{{ form.nueva_contrasena }}</div>
+              <div class="col-md-6">{{ form.confirmar_contrasena.label_tag }}{{ form.confirmar_contrasena }}</div>
+            </div>
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger mt-3">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <div class="d-flex justify-content-end mt-3">
+              <button class="btn btn-primary me-2" type="submit"><i class="fas fa-save"></i> Guardar</button>
+              <a href="{% url 'reserfast:index_admin' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

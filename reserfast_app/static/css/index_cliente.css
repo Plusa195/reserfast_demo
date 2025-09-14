@@ -1,0 +1,34 @@
+/* index cliente */
+
+.order-mesa{
+    width: 220px;
+    height: 245px;
+    position : relative;
+    left: 77;
+}
+
+.col-md-4.reserva-mesa {
+    position: relative;
+    left: 320px;
+    top: 85px;
+}
+
+.col-md-4.reserva-menu {
+    position: relative;
+    left: 47px;
+    top: 85px;
+}
+
+/* diseño de las cards*/
+.card.p-2.text-white {
+    background-color: #1c1917;
+    opacity: 0.9;
+    font-family: 'Playpen Sans', cursive;
+}
+
+.mesa-menu{
+    width: 225px;
+    height: 245px;
+    position : relative;
+    left: 77;
+}

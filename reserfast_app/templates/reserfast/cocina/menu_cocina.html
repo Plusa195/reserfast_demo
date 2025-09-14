@@ -1,0 +1,695 @@
+{% extends "reserfast/cocina/base_cocina.html" %}
+{% load static %}
+{% block title %}Gestión de Menú - Cocina{% endblock title %}
+
+{% block body %}
+
+<!-- Bienvenida -->
+<div class="container-fluid p-4 text-white text-center mt-3" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 15px;">
+    {% csrf_token %}
+    <h1 style="color: #44403c;"><i class="fas fa-chef-hat"></i> Gestión de Menú - Cocina</h1>
+    <p style="color: #44403c;">Bienvenido {{ usuario.s_nombreusuario }} | {{ fecha }}</p>
+    <div class="d-flex justify-content-center align-items-center gap-2">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="switchServicioCocina" {% if en_servicio %}checked{% endif %}>
+            <label class="form-check-label" for="switchServicioCocina">
+                <span id="labelServicioCocina" class="{% if en_servicio %}text-success{% else %}text-muted{% endif %}">
+                    {% if en_servicio %}En servicio{% else %}Fuera de servicio{% endif %}
+                </span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<!-- Alertas -->
+<div id="alertContainer" class="container mt-3"></div>
+
+<!-- Estadísticas -->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-center mb-3 border-success">
+                <div class="card-body">
+                    <h5 class="card-title text-success"><i class="fas fa-check-circle"></i> Menús Activos</h5>
+                    <p class="card-text display-6 text-success">{{ total_menus }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center mb-3 border-warning">
+                <div class="card-body">
+                    <h5 class="card-title text-warning"><i class="fas fa-pause-circle"></i> Menús Inactivos</h5>
+                    <p class="card-text display-6 text-warning">{{ total_inactivos }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center mb-3 border-info">
+                <div class="card-body">
+                    <h5 class="card-title text-info"><i class="fas fa-utensils"></i> Total Menús</h5>
+                    <p class="card-text display-6 text-info">{{ total_menus|add:total_inactivos }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Panel de Gestión -->
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3><i class="fas fa-list-alt"></i> Gestión de Menús</h3>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrearMenu">
+                <i class="fas fa-plus"></i> Nuevo Menú
+            </button>
+        </div>
+        
+        <div class="card-body p-0">
+            <!-- Nav tabs -->
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-activos-tab" data-bs-toggle="tab" data-bs-target="#nav-activos" type="button" role="tab">
+                        <i class="fas fa-check-circle text-success"></i> Menús Activos ({{ total_menus }})
+                    </button>
+                    <button class="nav-link" id="nav-inactivos-tab" data-bs-toggle="tab" data-bs-target="#nav-inactivos" type="button" role="tab">
+                        <i class="fas fa-pause-circle text-warning"></i> Menús Inactivos ({{ total_inactivos }})
+                    </button>
+                    <button class="nav-link" id="nav-categorias-tab" data-bs-toggle="tab" data-bs-target="#nav-categorias" type="button" role="tab">
+                        <i class="fas fa-tags text-info"></i> Vista por Categorías
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Tab content -->
+            <div class="tab-content p-3" id="nav-tabContent">
+                
+                <!-- Tab Menús Activos -->
+                <div class="tab-pane fade show active" id="nav-activos" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="tablaMenusActivos">
+                            <thead class="table-success">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Imagen</th>
+                                    <th>Título</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>Tipo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for menu in menus_activos %}
+                                <tr>
+                                    <td>{{ menu.id_menu }}</td>
+                                    <td>
+                                        {% if menu.s_imagen %}
+                                            <img src="{{ menu.s_imagen.url }}" alt="{{ menu.s_titulomenu }}" 
+                                                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 2px solid #28a745;">
+                                        {% else %}
+                                            <img src="/static/index_img/default-menu.jpg" alt="Sin imagen" 
+                                                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 2px solid #6c757d;">
+                                        {% endif %}
+                                    </td>
+                                    <td><strong>{{ menu.s_titulomenu }}</strong></td>
+                                    <td>{{ menu.s_descripcionmenu|truncatechars:60 }}</td>
+                                    <td>${{ menu.i_precio|default:0 }}</td>
+                                    <td><span class="badge bg-secondary">{{ menu.s_tipomenu|default:"Sin tipo" }}</span></td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-sm btn-outline-primary btn-editar-menu" 
+                                                    data-id="{{ menu.id_menu }}"
+                                                    data-titulo="{{ menu.s_titulomenu }}"
+                                                    data-descripcion="{{ menu.s_descripcionmenu }}"
+                                                    data-precio="{{ menu.i_precio }}"
+                                                    data-tipo="{{ menu.s_tipomenu }}"
+                                                    data-imagen="{% if menu.s_imagen %}{{ menu.s_imagen.url }}{% else %}{% endif %}">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-warning btn-toggle-menu" 
+                                                    data-id="{{ menu.id_menu }}"
+                                                    data-titulo="{{ menu.s_titulomenu }}"
+                                                    data-activar="false">
+                                                <i class="fas fa-pause"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center py-4">
+                                        <i class="fas fa-utensils fa-3x text-muted mb-3"></i>
+                                        <h5 class="text-muted">No hay menús activos</h5>
+                                        <p class="text-muted">Crea tu primer menú usando el botón "Nuevo Menú"</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab Menús Inactivos -->
+                <div class="tab-pane fade" id="nav-inactivos" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="tablaMenusInactivos">
+                            <thead class="table-warning">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Imagen</th>
+                                    <th>Título</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>Tipo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for menu in menus_inactivos %}
+                                <tr class="table-light">
+                                    <td>{{ menu.id_menu }}</td>
+                                    <td>
+                                        {% if menu.s_imagen %}
+                                            <img src="{{ menu.s_imagen.url }}" alt="{{ menu.s_titulomenu }}" 
+                                                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 2px solid #ffc107; opacity: 0.7;">
+                                        {% else %}
+                                            <img src="/static/index_img/default-menu.jpg" alt="Sin imagen" 
+                                                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 2px solid #6c757d; opacity: 0.7;">
+                                        {% endif %}
+                                    </td>
+                                    <td><strong class="text-muted">{{ menu.s_titulomenu }}</strong></td>
+                                    <td class="text-muted">{{ menu.s_descripcionmenu|truncatechars:60 }}</td>
+                                    <td><span class="badge bg-warning text-dark">${{ menu.i_precio|default:0 }}</span></td>
+                                    <td><span class="badge bg-light text-dark">{{ menu.s_tipomenu|default:"Sin tipo" }}</span></td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-sm btn-outline-primary btn-editar-menu" 
+                                                    data-id="{{ menu.id_menu }}"
+                                                    data-titulo="{{ menu.s_titulomenu }}"
+                                                    data-descripcion="{{ menu.s_descripcionmenu }}"
+                                                    data-precio="{{ menu.i_precio }}"
+                                                    data-tipo="{{ menu.s_tipomenu }}"
+                                                    data-imagen="{% if menu.s_imagen %}{{ menu.s_imagen.url }}{% else %}{% endif %}">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success btn-toggle-menu" 
+                                                    data-id="{{ menu.id_menu }}"
+                                                    data-titulo="{{ menu.s_titulomenu }}"
+                                                    data-activar="true">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center py-4">
+                                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                                        <h5 class="text-success">¡Excelente!</h5>
+                                        <p class="text-muted">No hay menús inactivos. Todos tus menús están disponibles.</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab Vista por Categorías -->
+                <div class="tab-pane fade" id="nav-categorias" role="tabpanel">
+                    {% for categoria, menus in categorias.items %}
+                    <div class="mb-4">
+                        <h4 class="border-bottom pb-2 mb-3">
+                            <i class="fas fa-tag text-info me-2"></i>{{ categoria }}
+                            <span class="badge bg-info ms-2">{{ menus|length }}</span>
+                        </h4>
+                        <div class="row">
+                            {% for menu in menus %}
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="card h-100 {% if menu.b_activo %}border-success{% else %}border-warning{% endif %}">
+                                    <div class="position-relative">
+                                        {% if menu.s_imagen %}
+                                            <img src="{{ menu.s_imagen.url }}" class="card-img-top" alt="{{ menu.s_titulomenu }}" 
+                                                 style="height: 200px; object-fit: cover;">
+                                        {% else %}
+                                            <img src="/static/index_img/default-menu.jpg" class="card-img-top" alt="Sin imagen" 
+                                                 style="height: 200px; object-fit: cover;">
+                                        {% endif %}
+                                        <span class="position-absolute top-0 start-0 badge {% if menu.b_activo %}bg-success{% else %}bg-warning text-dark{% endif %} m-2">
+                                            {% if menu.b_activo %}Activo{% else %}Inactivo{% endif %}
+                                        </span>
+                                        <span class="position-absolute top-0 end-0 badge bg-primary m-2 fs-6">
+                                            ${{ menu.i_precio|default:0 }}
+                                        </span>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ menu.s_titulomenu }}</h5>
+                                        <p class="card-text">{{ menu.s_descripcionmenu|truncatechars:100 }}</p>
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                <i class="fas fa-tags me-1"></i>{{ menu.s_tipomenu|default:"Sin tipo" }}
+                                            </small>
+                                        </p>
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        <div class="btn-group w-100" role="group">
+                                            <button class="btn btn-outline-primary btn-sm btn-editar-menu" 
+                                                    data-id="{{ menu.id_menu }}"
+                                                    data-titulo="{{ menu.s_titulomenu }}"
+                                                    data-descripcion="{{ menu.s_descripcionmenu }}"
+                                                    data-precio="{{ menu.i_precio }}"
+                                                    data-tipo="{{ menu.s_tipomenu }}"
+                                                    data-imagen="{% if menu.s_imagen %}{{ menu.s_imagen.url }}{% else %}{% endif %}">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                            <button class="btn {% if menu.b_activo %}btn-outline-warning{% else %}btn-outline-success{% endif %} btn-sm btn-toggle-menu" 
+                                                    data-id="{{ menu.id_menu }}"
+                                                    data-titulo="{{ menu.s_titulomenu }}"
+                                                    data-activar="{% if menu.b_activo %}false{% else %}true{% endif %}">
+                                                {% if menu.b_activo %}
+                                                    <i class="fas fa-pause"></i> Pausar
+                                                {% else %}
+                                                    <i class="fas fa-play"></i> Activar
+                                                {% endif %}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-utensils fa-4x text-muted mb-4"></i>
+                        <h4 class="text-muted">No hay menús creados</h4>
+                        <p class="text-muted">Comienza creando tu primer menú</p>
+                        <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalCrearMenu">
+                            <i class="fas fa-plus"></i> Crear Primer Menú
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALES -->
+
+<!-- Modal Crear Menú -->
+<div class="modal fade" id="modalCrearMenu" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="fas fa-plus"></i> Crear Nuevo Menú</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrearMenu">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="titulo_menu" class="form-label">Título del Menú *</label>
+                                <input type="text" class="form-control" id="titulo_menu" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="categoria_menu" class="form-label">Tipo de Menú *</label>
+                                <select class="form-control" id="categoria_menu" required>
+                                    <option value="">Seleccionar tipo</option>
+                                    <option value="Entradas">Entradas</option>
+                                    <option value="Platos Principales">Platos Principales</option>
+                                    <option value="Comida Rápida">Comida Rápida</option>
+                                    <option value="Almuerzos">Almuerzos</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Postres">Postres</option>
+                                    <option value="Especialidades">Especialidades</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="descripcion_menu" class="form-label">Descripción *</label>
+                        <textarea class="form-control" id="descripcion_menu" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="precio_menu" class="form-label">Precio ($) *</label>
+                                <input type="number" min="1" class="form-control" id="precio_menu" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="imagen_menu" class="form-label">Imagen del Menú</label>
+                        <input type="file" class="form-control" id="imagen_menu" accept="image/*">
+                        <div class="form-text">Selecciona una imagen para el menú (opcional)</div>
+                        <div id="preview_imagen" class="mt-2" style="display: none;">
+                            <img id="preview_img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="crearMenu()">
+                    <i class="fas fa-save"></i> Crear Menú
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Menú -->
+<div class="modal fade" id="modalEditarMenu" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="fas fa-edit"></i> Editar Menú</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarMenu">
+                    <input type="hidden" id="edit_menu_id">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit_titulo_menu" class="form-label">Título del Menú *</label>
+                                <input type="text" class="form-control" id="edit_titulo_menu" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit_categoria_menu" class="form-label">Tipo de Menú *</label>
+                                <select class="form-control" id="edit_categoria_menu" required>
+                                    <option value="">Seleccionar tipo</option>
+                                    <option value="Entradas">Entradas</option>
+                                    <option value="Platos Principales">Platos Principales</option>
+                                    <option value="Comida Rápida">Comida Rápida</option>
+                                    <option value="Almuerzos">Almuerzos</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Postres">Postres</option>
+                                    <option value="Especialidades">Especialidades</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="edit_descripcion_menu" class="form-label">Descripción *</label>
+                        <textarea class="form-control" id="edit_descripcion_menu" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="edit_precio_menu" class="form-label">Precio ($) *</label>
+                                <input type="number" min="1" class="form-control" id="edit_precio_menu" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="edit_imagen_menu" class="form-label">Imagen del Menú</label>
+                        <input type="file" class="form-control" id="edit_imagen_menu" accept="image/*">
+                        <div class="form-text">Selecciona una nueva imagen para reemplazar la actual (opcional)</div>
+                        <div id="edit_preview_imagen" class="mt-2">
+                            <div id="current_image" style="display: none;">
+                                <label class="form-label">Imagen Actual:</label>
+                                <div>
+                                    <img id="current_img" src="" alt="Imagen actual" style="max-width: 200px; max-height: 200px; border-radius: 8px;">
+                                </div>
+                            </div>
+                            <div id="edit_preview_new" class="mt-2" style="display: none;">
+                                <label class="form-label">Nueva imagen:</label>
+                                <div>
+                                    <img id="edit_preview_img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="actualizarMenu()">
+                    <i class="fas fa-save"></i> Actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ================= FUNCIONES AUXILIARES =================
+
+function showAlert(message, type = 'success') {
+    const alertContainer = document.getElementById('alertContainer');
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-triangle' : 'info-circle'}"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    alertContainer.appendChild(alertDiv);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
+    }, 5000);
+}
+
+function getCsrfToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+
+// ================= FUNCIONES MENÚS =================
+
+function crearMenu() {
+    const formData = new FormData();
+    formData.append('s_titulomenu', document.getElementById('titulo_menu').value);
+    formData.append('s_descripcionmenu', document.getElementById('descripcion_menu').value);
+    formData.append('i_precio', document.getElementById('precio_menu').value);
+    formData.append('s_tipomenu', document.getElementById('categoria_menu').value);
+    
+    // Agregar imagen si se seleccionó una
+    const imagenInput = document.getElementById('imagen_menu');
+    if (imagenInput.files[0]) {
+        formData.append('s_imagen', imagenInput.files[0]);
+    }
+    
+    fetch('/reserfast/ajax/crear_menu/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert(data.mensaje, 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modalCrearMenu')).hide();
+            location.reload(); // Recargar para mostrar el nuevo menú
+        } else {
+            showAlert(data.mensaje, 'danger');
+        }
+    })
+    .catch(error => {
+        showAlert('Error al crear menú', 'danger');
+        console.error('Error:', error);
+    });
+}
+
+function editarMenu(id, titulo, descripcion, precio, tipo, imagen) {
+    document.getElementById('edit_menu_id').value = id;
+    document.getElementById('edit_titulo_menu').value = titulo;
+    document.getElementById('edit_descripcion_menu').value = descripcion;
+    document.getElementById('edit_precio_menu').value = precio;
+    document.getElementById('edit_categoria_menu').value = tipo;
+    
+    // Mostrar imagen actual si existe
+    const currentImageDiv = document.getElementById('current_image');
+    const currentImg = document.getElementById('current_img');
+    
+    if (imagen && imagen.trim() !== '') {
+        currentImg.src = imagen;
+        currentImageDiv.style.display = 'block';
+    } else {
+        currentImageDiv.style.display = 'none';
+    }
+    
+    // Limpiar preview de nueva imagen
+    document.getElementById('edit_preview_new').style.display = 'none';
+    document.getElementById('edit_imagen_menu').value = '';
+    
+    new bootstrap.Modal(document.getElementById('modalEditarMenu')).show();
+}
+
+function actualizarMenu() {
+    const id = document.getElementById('edit_menu_id').value;
+    const formData = new FormData();
+    formData.append('s_titulomenu', document.getElementById('edit_titulo_menu').value);
+    formData.append('s_descripcionmenu', document.getElementById('edit_descripcion_menu').value);
+    formData.append('i_precio', document.getElementById('edit_precio_menu').value);
+    formData.append('s_tipomenu', document.getElementById('edit_categoria_menu').value);
+    
+    // Agregar imagen si se seleccionó una nueva
+    const imagenInput = document.getElementById('edit_imagen_menu');
+    if (imagenInput.files[0]) {
+        formData.append('s_imagen', imagenInput.files[0]);
+    }
+    
+    fetch(`/reserfast/ajax/editar_menu_cocina/${id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert(data.mensaje, 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modalEditarMenu')).hide();
+            location.reload();
+        } else {
+            showAlert(data.mensaje, 'danger');
+        }
+    })
+    .catch(error => {
+        showAlert('Error al actualizar menú', 'danger');
+        console.error('Error:', error);
+    });
+}
+
+function toggleMenu(id, titulo, activar) {
+    const accion = activar ? 'activar' : 'desactivar';
+    if (confirm(`¿Está seguro de ${accion} el menú "${titulo}"?`)) {
+        fetch(`/reserfast/ajax/toggle_menu_cocina/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert(data.mensaje, 'success');
+                location.reload();
+            } else {
+                showAlert(data.mensaje, 'danger');
+            }
+        })
+        .catch(error => {
+            showAlert('Error al cambiar estado del menú', 'danger');
+            console.error('Error:', error);
+        });
+    }
+}
+
+// Limpiar formularios cuando se cierran los modales
+document.addEventListener('DOMContentLoaded', function() {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.addEventListener('hidden.bs.modal', function() {
+            const forms = modal.querySelectorAll('form');
+            forms.forEach(form => form.reset());
+            // Limpiar previews de imagen
+            document.getElementById('preview_imagen').style.display = 'none';
+            document.getElementById('edit_preview_new').style.display = 'none';
+            document.getElementById('current_image').style.display = 'none';
+        });
+    });
+    
+    // Event listeners para botones de menú
+    document.addEventListener('click', function(e) {
+        // Botón editar menú
+        if (e.target.closest('.btn-editar-menu')) {
+            const button = e.target.closest('.btn-editar-menu');
+            const id = button.getAttribute('data-id');
+            const titulo = button.getAttribute('data-titulo');
+            const descripcion = button.getAttribute('data-descripcion');
+            const precio = button.getAttribute('data-precio');
+            const tipo = button.getAttribute('data-tipo');
+            const imagen = button.getAttribute('data-imagen');
+            editarMenu(id, titulo, descripcion, precio, tipo, imagen);
+        }
+        
+        // Botón toggle menú
+        if (e.target.closest('.btn-toggle-menu')) {
+            const button = e.target.closest('.btn-toggle-menu');
+            const id = button.getAttribute('data-id');
+            const titulo = button.getAttribute('data-titulo');
+            const activar = button.getAttribute('data-activar') === 'true';
+            toggleMenu(id, titulo, activar);
+        }
+    });
+
+    // Toggle servicio cocinero
+    const sw = document.getElementById('switchServicioCocina');
+    if (sw) {
+        sw.addEventListener('change', function(){
+            fetch('{% url "reserfast:ajax_toggle_empleado_servicio" %}', {
+                method: 'POST',
+                headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || '' }
+            })
+            .then(r => r.json())
+            .then(data => {
+                const lab = document.getElementById('labelServicioCocina');
+                if (data.success && lab) {
+                    if (data.en_servicio) {
+                        lab.textContent = 'En servicio';
+                        lab.classList.remove('text-muted');
+                        lab.classList.add('text-success');
+                    } else {
+                        lab.textContent = 'Fuera de servicio';
+                        lab.classList.remove('text-success');
+                        lab.classList.add('text-muted');
+                    }
+                }
+            }).catch(()=>{});
+        })
+    }
+    
+    // Preview de imagen para crear menú
+    document.getElementById('imagen_menu').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview_img').src = e.target.result;
+                document.getElementById('preview_imagen').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('preview_imagen').style.display = 'none';
+        }
+    });
+    
+    // Preview de imagen para editar menú
+    document.getElementById('edit_imagen_menu').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('edit_preview_img').src = e.target.result;
+                document.getElementById('edit_preview_new').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('edit_preview_new').style.display = 'none';
+        }
+    });
+});
+</script>
+
+{% endblock body %}

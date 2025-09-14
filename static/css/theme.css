@@ -1,0 +1,178 @@
+/* Professional light/dark theme with enhanced readability */
+
+:root {
+  --bg-overlay: rgba(255,255,255,0.1);
+  --card-bg: rgba(255,255,255,0.95);
+  --card-border: #e5e7eb;
+  --text-color: #111827;
+  --text-secondary: #374151;
+  --muted-color: #6b7280;
+  --navbar-bg: #1e293b;
+  --accent-color: #3b82f6;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --warning-color: #f59e0b;
+}
+
+body.theme-dark {
+  --bg-overlay: rgba(0,0,0,0.6);
+  --card-bg: rgba(30,41,59,0.95);    /* slate-800 with transparency */
+  --card-border: #475569;             /* slate-600 */
+  --text-color: #f1f5f9;              /* slate-100 - high contrast white */
+  --text-secondary: #cbd5e1;          /* slate-300 */
+  --muted-color: #94a3b8;             /* slate-400 */
+  --navbar-bg: #0f172a;               /* slate-900 */
+  --accent-color: #60a5fa;            /* blue-400 */
+  --success-color: #34d399;           /* emerald-400 */
+  --danger-color: #f87171;            /* red-400 */
+  --warning-color: #fbbf24;           /* amber-400 */
+}
+
+/* Enhanced theme application */
+body {
+  color: var(--text-color) !important;
+  background-color: #f8fafc;
+  transition: all 0.3s ease;
+}
+
+body.theme-dark {
+  background-color: #0f172a;
+  background-blend-mode: multiply;
+}
+
+/* Typography enhancements */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color) !important;
+}
+
+p, span, div, li, td, th {
+  color: var(--text-color) !important;
+}
+
+.text-muted {
+  color: var(--muted-color) !important;
+}
+
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+/* Cards and surfaces */
+.card {
+  background-color: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+body.theme-dark .card {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced navbar */
+.navbar-dark {
+  background-color: var(--navbar-bg) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Form controls with better dark mode support */
+body.theme-dark .form-control,
+body.theme-dark .form-select {
+  background-color: #1e293b !important;
+  border-color: var(--card-border) !important;
+  color: var(--text-color) !important;
+}
+
+body.theme-dark .form-control::placeholder {
+  color: var(--muted-color) !important;
+}
+
+/* Button enhancements */
+.btn-primary {
+  background-color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+}
+
+.btn-success {
+  background-color: var(--success-color) !important;
+  border-color: var(--success-color) !important;
+}
+
+.btn-danger {
+  background-color: var(--danger-color) !important;
+  border-color: var(--danger-color) !important;
+}
+
+.btn-warning {
+  background-color: var(--warning-color) !important;
+  border-color: var(--warning-color) !important;
+}
+
+/* Alert enhancements */
+body.theme-dark .alert-success {
+  background-color: rgba(52, 211, 153, 0.2) !important;
+  border-color: var(--success-color) !important;
+  color: var(--text-color) !important;
+}
+
+body.theme-dark .alert-danger {
+  background-color: rgba(248, 113, 113, 0.2) !important;
+  border-color: var(--danger-color) !important;
+  color: var(--text-color) !important;
+}
+
+body.theme-dark .alert-warning {
+  background-color: rgba(251, 191, 36, 0.2) !important;
+  border-color: var(--warning-color) !important;
+  color: var(--text-color) !important;
+}
+
+body.theme-dark .alert-info {
+  background-color: rgba(96, 165, 250, 0.2) !important;
+  border-color: var(--accent-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* Table enhancements */
+body.theme-dark .table {
+  color: var(--text-color) !important;
+}
+
+body.theme-dark .table-striped > tbody > tr:nth-of-type(odd) > td {
+  background-color: rgba(51, 65, 85, 0.3) !important;
+}
+
+/* Badge enhancements */
+body.theme-dark .badge {
+  color: #fff !important;
+}
+
+/* Modal and dropdown enhancements */
+body.theme-dark .modal-content {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+}
+
+body.theme-dark .dropdown-menu {
+  background-color: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+}
+
+body.theme-dark .dropdown-item {
+  color: var(--text-color) !important;
+}
+
+body.theme-dark .dropdown-item:hover {
+  background-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+/* Enhanced image styling */
+.fallback-img {
+  filter: contrast(0.9) saturate(0.9);
+  opacity: 0.8;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

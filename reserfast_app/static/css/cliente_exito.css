@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url(/static/index_img/fondo_clientes1.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Playpen Sans', cursive;
+}
+
+.notification-box {
+    width: 459px;
+    height: 250px;
+    background-color: #a3e635;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.notification-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.checkmark img {
+    width: 64px;
+    height: auto; /* Esto mantiene la proporción de la imagen */
+}
+
+
+.btn {
+    padding: 5px 15px;
+    background-color: #65a30d;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}

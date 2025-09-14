@@ -1,0 +1,29 @@
+{% extends "reserfast/clientes/base_cliente.html" %}
+{% load static %}
+{% block title %} Menú {% endblock title %}
+
+{% block body %}
+
+<div class="container mt-5 pt-4">
+    <div class="d-flex justify-content-between align-items-center text-white mb-3">
+        <h3 class="m-0"><i class="fas fa-utensils me-2"></i>Nuestro Menú</h3>
+        <a class="btn btn-primary" href="{% url 'reserfast:crear_reserva' %}">
+            <i class="fas fa-calendar-plus me-1"></i> Crear Reserva
+        </a>
+    </div>
+    <p class="text-light opacity-75">Explora nuestras categorías y agrega platos a tu reserva.</p>
+</div>
+
+<hr>
+
+
+{% include "reserfast/clientes/sub_menu.html" with titulo="Entradas" cards=frio %}
+<hr>
+{% include "reserfast/clientes/sub_menu.html" with titulo="Comida Rápida" cards=caliente %}
+<hr>
+{% include "reserfast/clientes/sub_menu.html" with titulo="Almuerzos" cards=almuerzos %}
+<hr>
+{% include "reserfast/clientes/sub_menu.html" with titulo="Bebidas" cards=bebidas %}
+<hr>
+
+{% endblock body %}

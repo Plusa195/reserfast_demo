@@ -1,0 +1,462 @@
+{% extends 'reserfast/clientes/base_cliente.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-gradient-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-calendar-plus"></i> Crear Nueva Reserva
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div id="loading-spinner" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="mt-3 text-muted">Cargando mesas y menús disponibles...</p>
+                    </div>
+
+                    <div id="content-container" style="display: none;">
+                        <form method="post" id="reservaForm">
+                            {% csrf_token %}
+                            
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            
+                            {% if debug_info %}
+                            <div class="alert alert-info">
+                                <strong>Debug:</strong> Mesas: {{ mesas_count }} | Menús: {{ menus_count }}
+                            </div>
+                            {% endif %}
+                            
+                            <div id="error-container"></div>
+                            
+                            
+                            <div class="mb-4">
+                                <label for="id_fecha_reserva" class="form-label fw-bold">
+                                    <i class="fas fa-calendar-alt text-primary"></i> Fecha de Reserva
+                                </label>
+                                <input type="date" 
+                                       id="id_fecha_reserva" 
+                                       name="fecha_reserva" 
+                                       class="form-control" 
+                                       required>
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-info-circle"></i> Selecciona una fecha a partir de hoy
+                                </small>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-table text-primary"></i> Seleccionar Mesa
+                                </label>                                {% if mesas_disponibles %}
+                                    <div class="alert alert-success">
+                                        <i class="fas fa-check-circle"></i> {{ mesas_count }} mesa(s) disponible(s)
+                                    </div>
+                                    <div class="row" id="mesa-container">
+                                        {% for mesa in mesas_list %}
+                                            <div class="col-md-4 col-lg-3 mb-3">
+                                                <div class="card mesa-card h-100" data-mesa-id="{{ mesa.id_mesa }}">
+                                                    <div class="card-body text-center">
+                                                        <i class="fas fa-table fa-3x mb-2 text-primary"></i>
+                                                        <h6 class="card-title">{{ mesa.s_nombremesa }}</h6>
+                                                        <p class="card-text small">{{ mesa.s_descripcionmesa|default:"Mesa estándar" }}</p>
+                                                        <span class="badge bg-success disponibilidad-badge">Verificando...</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    
+                                    <select name="mesa" id="id_mesa" class="form-select d-none" required>
+                                        <option value="">Selecciona una mesa</option>
+                                        {% for mesa in mesas_list %}
+                                            <option value="{{ mesa.id_mesa }}">{{ mesa.s_nombremesa }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    
+                                    <div id="mesa-disponibilidad" class="mt-2 small text-muted"></div>
+                                {% else %}
+                                    <div class="alert alert-warning text-center">
+                                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                        <h5 class="mt-2">No hay mesas disponibles</h5>
+                                        <p>Por favor, contacte al administrador o intente más tarde.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+    <div class="mb-4">
+        <label class="form-label fw-bold">
+            <i class="fas fa-utensils text-primary"></i> Seleccionar Menú
+        </label>
+        
+        {% if menus_disponibles %}
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> {{ menus_count }} menú(s) disponible(s)
+            </div>
+            <div class="row" id="menu-container">
+                {% for menu in menus_list %}
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card menu-card h-100">
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
+                                {% if menu.s_imagen %}
+                                    <img src="{{ menu.s_imagen.url }}" alt="{{ menu.s_titulomenu }}"
+                                         style="max-height: 140px; max-width: 100%; object-fit: cover; border-radius: 8px;">
+                                {% else %}
+                                    <i class="fas fa-utensils fa-3x text-muted"></i>
+                                {% endif %}
+                            </div>
+                            <div class="card-header bg-light">
+                                <h6 class="card-title mb-0">{{ menu.s_titulomenu }}</h6>
+                            </div>
+                            <div class="card-body">
+                                {% if menu.s_descripcionmenu %}
+                                    <p class="card-text small">{{ menu.s_descripcionmenu|truncatechars:100 }}</p>
+                                {% endif %}
+                                <p class="fw-bold text-primary">${{ menu.i_precio|floatformat:0 }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-check">
+                                    <input class="form-check-input menu-checkbox" type="checkbox" 
+                                           name="menus" value="{{ menu.id_menu }}" id="menu_{{ menu.id_menu }}">
+                                    <label class="form-check-label" for="menu_{{ menu.id_menu }}">
+                                        Seleccionar
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            {% if form.menus.errors %}
+                <div class="text-danger mt-2">
+                    {{ form.menus.errors }}
+                </div>
+            {% endif %}
+            
+            <small class="form-text text-muted">
+                <i class="fas fa-info-circle"></i> Selecciona al menos un menú
+            </small>
+        {% else %}
+            <div class="alert alert-warning text-center">
+                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                <h5 class="mt-2">No hay menús disponibles</h5>
+                <p>Por favor, contacte al administrador o intente más tarde.</p>
+            </div>
+        {% endif %}
+    </div>
+                            
+                            <div class="mb-4">
+                                <div class="card bg-light">
+                                    <div class="card-header">
+                                        <h6 class="card-title mb-0">
+                                            <i class="fas fa-calculator"></i> Resumen de la Reserva
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="resumen-reserva">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <p class="mb-2"><strong>Fecha:</strong> <span id="resumen-fecha">-</span></p>
+                                                    <p class="mb-2"><strong>Mesa:</strong> <span id="resumen-mesa">-</span></p>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <p class="mb-2"><strong>Menús:</strong> <span id="resumen-menus">0</span></p>
+                                                    <p class="mb-2"><strong>Total:</strong> $<span id="resumen-total">0</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{% url 'reserfast:mis_reservas' %}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Volver
+                                </a>
+                                <button type="submit" class="btn btn-primary" id="btnCrearReserva" disabled>
+                                    <i class="fas fa-calendar-plus"></i> Crear Reserva
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.mesa-card, .menu-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.mesa-card:hover, .menu-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.mesa-card.selected, .menu-card.selected {
+    border-color: #0d6efd;
+    background-color: #f8f9ff;
+}
+
+.mesa-card.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.mesa-card.no-disponible {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+.menu-checkbox:checked + label {
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+}
+
+.alert {
+    border-radius: 0.5rem;
+}
+
+.disponibilidad-badge {
+    font-size: 0.75rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mesaCards = document.querySelectorAll('.mesa-card');
+    const menuCheckboxes = document.querySelectorAll('.menu-checkbox');
+    const fechaInput = document.querySelector('#id_fecha_reserva');
+    const mesaSelect = document.querySelector('#id_mesa');
+    const btnCrearReserva = document.querySelector('#btnCrearReserva');
+    const resumenFecha = document.querySelector('#resumen-fecha');
+    const resumenMesa = document.querySelector('#resumen-mesa');
+    const resumenMenus = document.querySelector('#resumen-menus');
+    const resumenTotal = document.querySelector('#resumen-total');
+    const errorContainer = document.querySelector('#error-container');
+    const contentContainer = document.querySelector('#content-container');
+    const loadingSpinner = document.querySelector('#loading-spinner');
+    
+    loadingSpinner.style.display = 'none';
+    contentContainer.style.display = 'block';
+    
+    if (fechaInput) {
+        const today = new Date().toISOString().split('T')[0];
+        fechaInput.setAttribute('min', today);
+        fechaInput.setAttribute('type', 'date');
+    }
+    
+    mesaCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const mesaId = this.dataset.mesaId;
+            
+            mesaCards.forEach(c => c.classList.remove('selected'));
+            
+            this.classList.add('selected');
+            
+            if (mesaSelect) {
+                mesaSelect.value = mesaId;
+            }
+            
+            verificarDisponibilidadMesa(mesaId);
+            updateResumen();
+        });
+    });
+    
+    menuCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const card = this.closest('.menu-card');
+            if (this.checked) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+            updateResumen();
+        });
+    });
+    
+    function verificarDisponibilidadMesa(mesaId) {
+        if (!fechaInput.value) {
+            showError('Por favor selecciona una fecha primero');
+            return;
+        }
+        
+        const fecha = fechaInput.value;
+        const disponibilidadDiv = document.querySelector('#mesa-disponibilidad');
+        
+        const selectedCard = document.querySelector(`.mesa-card[data-mesa-id="${mesaId}"]`);
+        const badge = selectedCard.querySelector('.disponibilidad-badge');
+        badge.textContent = 'Verificando...';
+        badge.className = 'badge bg-warning disponibilidad-badge';
+        
+        fetch(`/reserfast/verificar_disponibilidad_mesa/${mesaId}/?fecha=${fecha}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.disponible) {
+                    badge.textContent = 'Disponible';
+                    badge.className = 'badge bg-success disponibilidad-badge';
+                    disponibilidadDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> La mesa "${data.mesa}" está disponible para el ${fecha}
+                        </div>
+                    `;
+                    clearErrors();
+                } else {
+                    badge.textContent = 'No disponible';
+                    badge.className = 'badge bg-danger disponibilidad-badge';
+                    disponibilidadDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-times-circle"></i> La mesa "${data.mesa}" no está disponible para el ${fecha}
+                        </div>
+                    `;
+                    mesaCards.forEach(c => c.classList.remove('selected'));
+                    if (mesaSelect) mesaSelect.value = '';
+                }
+                updateResumen();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('Error al verificar disponibilidad de la mesa');
+                badge.textContent = 'Error';
+                badge.className = 'badge bg-danger disponibilidad-badge';
+            });
+    }
+    
+    function updateResumen() {
+        if (fechaInput && fechaInput.value) {
+            const fecha = new Date(fechaInput.value);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            resumenFecha.textContent = fecha.toLocaleDateString('es-CL', options);
+        } else {
+            resumenFecha.textContent = '-';
+        }
+        
+        const selectedMesa = document.querySelector('.mesa-card.selected');
+        if (selectedMesa) {
+            const mesaName = selectedMesa.querySelector('.card-title').textContent;
+            resumenMesa.textContent = mesaName;
+        } else {
+            resumenMesa.textContent = '-';
+        }
+        
+        let menuCount = 0;
+        let total = 0;
+        
+        menuCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                menuCount++;
+                const card = checkbox.closest('.menu-card');
+                const priceText = card.querySelector('.text-primary').textContent;
+                const price = parseInt(priceText.replace('$', ''));
+                total += price;
+            }
+        });
+        
+        resumenMenus.textContent = menuCount;
+        resumenTotal.textContent = total.toLocaleString('es-CL');
+        
+        const isValid = fechaInput.value && selectedMesa && menuCount > 0;
+        btnCrearReserva.disabled = !isValid;
+    }
+    
+    function showError(message) {
+        errorContainer.innerHTML = `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+    }
+    
+    function clearErrors() {
+        errorContainer.innerHTML = '';
+    }
+    
+    if (fechaInput) {
+        fechaInput.addEventListener('change', function() {
+            mesaCards.forEach(c => {
+                c.classList.remove('selected');
+                const badge = c.querySelector('.disponibilidad-badge');
+                badge.textContent = 'Verificando...';
+                badge.className = 'badge bg-success disponibilidad-badge';
+            });
+            if (mesaSelect) mesaSelect.value = '';
+            document.querySelector('#mesa-disponibilidad').innerHTML = '';
+            updateResumen();
+            
+            updateAllTableAvailability();
+        });
+    }
+    
+    function updateAllTableAvailability() {
+        if (!fechaInput.value) return;
+        
+        const fecha = fechaInput.value;
+        mesaCards.forEach(card => {
+            const mesaId = card.dataset.mesaId;
+            const badge = card.querySelector('.disponibilidad-badge');
+            
+            fetch(`/reserfast/verificar_disponibilidad_mesa/${mesaId}/?fecha=${fecha}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.disponible) {
+                        badge.textContent = 'Disponible';
+                        badge.className = 'badge bg-success disponibilidad-badge';
+                        card.classList.remove('disabled');
+                    } else {
+                        badge.textContent = 'No disponible';
+                        badge.className = 'badge bg-danger disponibilidad-badge';
+                        card.classList.add('disabled');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    badge.textContent = 'Error';
+                    badge.className = 'badge bg-danger disponibilidad-badge';
+                });
+        });
+    }
+    
+    const form = document.querySelector('#reservaForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const fecha = fechaInput.value;
+            const mesa = document.querySelector('.mesa-card.selected');
+            const menusSeleccionados = Array.from(menuCheckboxes).some(cb => cb.checked);
+            
+            if (!fecha || !mesa || !menusSeleccionados) {
+                e.preventDefault();
+                showError('Por favor completa todos los campos requeridos');
+                return false;
+            }
+        });
+    }
+    
+    updateResumen();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,287 @@
+{% extends 'reserfast/clientes/base_cliente.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">Editar Reserva #{{ reserva.id_reserva }}</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="editarReservaForm">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.fecha_reserva.id_for_label }}" class="form-label">
+                                        <i class="fas fa-calendar-alt"></i> Fecha de Reserva
+                                    </label>
+                                    {{ form.fecha_reserva }}
+                                    <div id="fecha-error" class="text-danger" style="display: none;"></div>
+                                    {% if form.fecha_reserva.errors %}
+                                        <div class="text-danger">
+                                            {{ form.fecha_reserva.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.mesa.id_for_label }}" class="form-label">
+                                        <i class="fas fa-table"></i> Seleccionar Mesa
+                                    </label>
+                                    {{ form.mesa }}
+                                    <div id="mesa-error" class="text-danger" style="display: none;"></div>
+                                    <small class="form-text text-muted">
+                                        Mesa actual: <strong>{{ reserva_mesa.fk_id_mesa.s_nombremesa|default:"Sin asignar" }}</strong>
+                                    </small>
+                                    <div id="mesa-disponibilidad" class="mt-2"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-utensils"></i> Seleccionar Menús
+                                    </label>
+                                    <div id="menus-container">
+{% for menu in form.menus.field.queryset %}
+<div class="card mb-2 menu-card" data-menu-id="{{ menu.id_menu }}">
+    <div class="card-body py-2 d-flex align-items-center">
+        {% if menu.s_imagen %}
+            <img src="{{ menu.s_imagen.url }}" alt="Imagen menú" style="max-width:80px;max-height:80px;margin-right:16px;">
+        {% endif %}
+        <div class="form-check flex-grow-1">
+            {# Determinar si el menú está seleccionado: usar valor del form o initial #}
+                {% with seleccionados=form.menus.value|default:menu_ids_actuales_str %}
+                <input class="form-check-input" type="checkbox" name="menus" value="{{ menu.id_menu }}" id="menu_{{ menu.id_menu }}" data-precio="{{ menu.i_precio }}"
+                    {% if seleccionados and menu.id_menu|stringformat:'s' in seleccionados %}checked{% endif %}>
+                {% endwith %}
+            <label class="form-check-label" for="menu_{{ menu.id_menu }}">
+                <strong>{{ menu.s_titulomenu }}</strong><br>
+                <small class="text-muted">{{ menu.s_descripcionmenu|truncatechars:50 }}</small><br>
+                <span class="text-primary fw-bold">${{ menu.i_precio }}</span>
+            </label>
+        </div>
+    </div>
+</div>
+{% endfor %}
+                                    </div>
+                                    <div id="menus-error" class="text-danger" style="display: none;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    <h6><i class="fas fa-info-circle"></i> Resumen de la reserva:</h6>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <strong>Fecha seleccionada:</strong> <span id="fecha-seleccionada">{{ form.fecha_reserva.value|default:reserva.d_fechainicio|date:"d/m/Y" }}</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Mesa seleccionada:</strong> <span id="mesa-seleccionada">{{ reserva_mesa.fk_id_mesa.s_nombremesa|default:"Por seleccionar" }}</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Total:</strong> $<span id="total-reserva">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-warning me-md-2" id="btn-actualizar">
+                                <i class="fas fa-save"></i> Actualizar Reserva
+                            </button>
+                            <a href="{% url 'reserfast:mis_reservas' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.menu-card,
+.menu-card .card-body,
+.menu-card .form-check,
+.menu-card .form-check-label {
+    background: #fff !important;
+}
+/* Mejor visual para los menús en editar reserva */
+/* Interfaz clara y legible para los menús en editar reserva */
+/* Fondo blanco puro y sin sombras grises para los menús */
+.menu-card {
+    background: #ffffff !important;
+    border: 1px solid #ffd966;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px rgba(255,193,7,0.08);
+    transition: box-shadow 0.2s, transform 0.2s;
+    margin-bottom: 18px;
+}
+.menu-card:hover {
+    box-shadow: 0 8px 32px rgba(255,193,7,0.18);
+    transform: translateY(-2px) scale(1.03);
+    border-color: #ffc107;
+}
+.menu-card.selected {
+    border-color: #ffc107;
+    background-color: #fffde7 !important;
+}
+.menu-card img {
+    border-radius: 10px;
+    border: 1px solid #ffe;
+    background: #fff;
+}
+.menu-card .form-check-label {
+    font-size: 1.13rem;
+    color: #222 !important;
+    font-weight: 500;
+}
+.menu-card .text-muted {
+    color: #444 !important;
+}
+.menu-card .fw-bold {
+    color: #d35400 !important;
+    font-size: 1.08rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fechaInput = document.querySelector('#id_fecha_reserva');
+    const mesaSelect = document.querySelector('#id_mesa');
+    const menuCheckboxes = document.querySelectorAll('input[name="menus"]');
+    const totalSpan = document.querySelector('#total-reserva');
+    const btnActualizar = document.querySelector('#btn-actualizar');
+    
+    // Calcular total desde data-precio de cada checkbox seleccionado
+    
+    // Actualizar fecha visual
+    if (fechaInput) {
+        fechaInput.addEventListener('change', function() {
+            document.querySelector('#fecha-seleccionada').textContent = this.value ? new Date(this.value).toLocaleDateString('es-CL') : 'Por seleccionar';
+            verificarDisponibilidad();
+        });
+    }
+    
+    // Actualizar mesa visual y verificar disponibilidad
+    if (mesaSelect) {
+        mesaSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            document.querySelector('#mesa-seleccionada').textContent = selectedOption.textContent;
+            verificarDisponibilidad();
+        });
+    }
+    
+    // Calcular total en tiempo real
+    function calcularTotal() {
+        let total = 0;
+        menuCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const precio = Number(checkbox.dataset.precio || 0);
+                total += isNaN(precio) ? 0 : precio;
+            }
+        });
+        totalSpan.textContent = total.toLocaleString('es-CL');
+    }
+    
+    // Verificar disponibilidad de mesa en tiempo real
+    function verificarDisponibilidad() {
+        const mesaId = mesaSelect.value;
+        const fecha = fechaInput.value;
+        
+        if (mesaId && fecha) {
+            const excludeId = '{{ reserva.id_reserva }}';
+            fetch(`/reserfast/verificar_disponibilidad_mesa/${mesaId}/?fecha=${fecha}&exclude_reserva_id=${excludeId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const disponibilidadDiv = document.querySelector('#mesa-disponibilidad');
+                    if (data.disponible) {
+                        disponibilidadDiv.innerHTML = '<span class="badge bg-success"><i class="fas fa-check"></i> Mesa disponible</span>';
+                        btnActualizar.disabled = false;
+                    } else {
+                        disponibilidadDiv.innerHTML = '<span class="badge bg-danger"><i class="fas fa-times"></i> Mesa no disponible para esta fecha</span>';
+                        btnActualizar.disabled = true;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    }
+    
+    // Event listeners para checkboxes de menú
+    menuCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            calcularTotal();
+            const card = this.closest('.menu-card');
+            if (this.checked) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+        });
+    });
+    
+    // Estado inicial: aplicar estilo seleccionado y calcular total
+    menuCheckboxes.forEach(cb => {
+        const card = cb.closest('.menu-card');
+        if (cb.checked) {
+            card.classList.add('selected');
+        } else {
+            card.classList.remove('selected');
+        }
+    });
+    // Calcular total inicial
+    calcularTotal();
+    
+    // Verificar disponibilidad inicial
+    verificarDisponibilidad();
+    
+    // Validación del formulario en tiempo real
+    document.querySelector('#editarReservaForm').addEventListener('submit', function(e) {
+        let valid = true;
+        
+        // Validar fecha
+        if (!fechaInput.value) {
+            document.querySelector('#fecha-error').textContent = 'Por favor selecciona una fecha';
+            document.querySelector('#fecha-error').style.display = 'block';
+            valid = false;
+        } else {
+            document.querySelector('#fecha-error').style.display = 'none';
+        }
+        
+        // Validar mesa
+        if (!mesaSelect.value) {
+            document.querySelector('#mesa-error').textContent = 'Por favor selecciona una mesa';
+            document.querySelector('#mesa-error').style.display = 'block';
+            valid = false;
+        } else {
+            document.querySelector('#mesa-error').style.display = 'none';
+        }
+        
+        // Validar menús
+        const menusSeleccionados = Array.from(menuCheckboxes).some(cb => cb.checked);
+        if (!menusSeleccionados) {
+            document.querySelector('#menus-error').textContent = 'Por favor selecciona al menos un menú';
+            document.querySelector('#menus-error').style.display = 'block';
+            valid = false;
+        } else {
+            document.querySelector('#menus-error').style.display = 'none';
+        }
+        
+        if (!valid) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
+{% endblock %}

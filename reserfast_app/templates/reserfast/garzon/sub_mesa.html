@@ -1,0 +1,31 @@
+{% load static %}
+
+<div class="mesas-section">
+    <h1 class="text-center">{{ titulo }}</h1>
+    <hr>
+    <div class="mesas-grid">
+        {% for card in cards %}
+        <div class="mesa-card">
+            <div class="mesa-image">
+                {% if card.b_ocupado == 0 %}
+                    <img src="{% static 'index_img/disponible.png' %}">
+                {% else %}
+                    <img src="{% static 'index_img/no_disponible.png' %}">
+                {% endif %} 
+            </div>
+            <div class="mesa-info">
+                <h4>{{ card.s_nombremesa }}</h4>
+                <p>{{ card.s_descripcionmesa }}</p>
+                {% if card.b_ocupado == 1 %}
+                    <a href="#" class="btn btn-danger">No Disponible</a>
+                {% else %}
+                    <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something">
+                    <label class="form-check-label">Reservar</label>
+                                      
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+

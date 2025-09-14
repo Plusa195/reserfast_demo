@@ -1,0 +1,45 @@
+{% extends 'reserfast/admin/base_admin.html' %}
+{% load static %}
+{% block title-admin %} Jefe Garzón {% endblock title-admin %}
+
+{% block body-admin %}
+
+    <div class="elegant-table-container">
+        <h3>Jefes de Garzones</h3>
+        <br>
+        <table class="elegant-table">
+            <thead>
+                <tr>
+                    <th class="columna">ID</th>
+                    <th class="columna">Nombre</th>
+                    <th class="columna">Primer Apellido</th>
+                    <th class="columna">Segundo Apellido</th>
+                    <th class="columna">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for garzon in garzones %}
+                    <tr>
+                        <td class="fila">{{ garzon.id_usuario }}</td>
+                        <td class="fila">{{ garzon.s_nombreusuario }}</td>
+                        <td class="fila">{{ garzon.s_primerapellidousuario }}</td>
+                        <td class="fila">{{ garzon.s_segundoapellidousuario }}</td>
+                        <td class="fila">
+                            <form method="post" action="{% url 'reserfast:eliminar_garzones' garzon.id_usuario %}">
+                                {% csrf_token %}
+                                <button type="submit" style="background: none; border: none;">
+                                    <img src="{% static 'index_img/remove.png' %}" alt="Eliminar" style="background-color: transparent">
+                                </button>
+                            </form>
+                            <a href="{% url 'reserfast:actualizar_garzones' garzon.id_usuario %}">
+                                <img src="{% static 'index_img/pen.png' %}" alt="Editar">
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'reserfast:agregar_garzones' %}" class="button btn-success agregar-garzon">Agregar</a>
+    </div>
+  
+{% endblock body-admin %}

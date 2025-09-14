@@ -1,0 +1,106 @@
+
+/* estilo para las bases*/
+.flex-grow-1 {
+    flex-grow: 1!important;
+    background-color: #212529b8;
+}
+
+
+/*Titulo tipo menu*/
+h1.text-center.tipo-menu {
+    color: antiquewhite;
+    font-family: 'Playpen Sans', ui-monospace;
+
+}
+
+/*Container card menu*/
+.container.card-menu {
+    position: relative;
+    padding: 19px 20px 100px 10px;
+}
+
+
+/* Estilos base para la card de menu */
+.card-custom {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    background-color: aliceblue;
+    font-family: 'Playpen Sans', ui-monospace;
+    height : 600px;
+}
+
+.card-custom:hover {
+    transform: scale(1.05);
+}
+
+/* Estilos para la imagen de la tarjeta */
+.card-img-available {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    opacity: 1;
+}
+
+.card-img-unavailable {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    opacity: 0.9;
+}
+
+/* Ajustes adicionales para el cuerpo de la tarjeta */
+.card-custom .card-body {
+    padding: 15px;
+}
+
+/* Estilo para el título y texto de la tarjeta */
+.card-custom .card-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-custom .card-text {
+    margin-bottom: 15px;
+}
+
+/* Ajustes para el grupo de botones de cantidad */
+.input-group.mb-3 {
+    width: 50%;
+    margin: 0 auto;
+}
+
+/* Boton para quitar cantidad de menu a reservar*/
+button.btn.btn-outline-secondary.remove {
+    width: 42px;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    /* background: #e11d48;
+    border-color: #e11d48; */
+}
+
+
+
+/* Boton para quitar cantidad de menu a reservar*/
+button.btn.btn-outline-secondary.more {
+    width: 42px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    /* background: #84cc16;
+    border-color: #84cc16; */
+}
+
+input#quantityInput {
+    height: 38px;
+    top: 16px;
+    border-radius: 3px;
+}
+
+/*estilo para precio de menus*/
+p.card-text.precio-menu {
+    margin: 0px 0px 0px 100px;
+    font-family: 'Abril Fatface', serif;
+    font-family: 'Anton', sans-serif;
+    font-family: 'Dancing Script', cursive;
+    font-family: 'Roboto Mono', monospace;
+    font-family: 'Young Serif', serif;
+}

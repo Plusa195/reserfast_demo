@@ -1,0 +1,88 @@
+{% extends 'reserfast/clientes/base_cliente.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-trash-alt"></i> Confirmar Eliminación de Reserva
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-exclamation-triangle fa-4x text-warning mb-3"></i>
+                        <h5>¿Estás seguro de eliminar esta reserva?</h5>
+                        <p class="text-muted">Esta acción no se puede deshacer.</p>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle"></i> Detalles de la reserva:</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled mb-0">
+                                    <li><strong>ID Reserva:</strong> #{{ reserva.id_reserva }}</li>
+                                    <li><strong>Fecha:</strong> {{ reserva.d_fechainicio|date:"d/m/Y" }}</li>
+                                    {% if reserva.i_totalreserva %}
+                                        <li><strong>Total:</strong> ${{ reserva.i_totalreserva|floatformat:0 }}</li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled mb-0">
+                                    <li><strong>Estado:</strong> 
+                                        {% if reserva.b_activo %}
+                                            <span class="badge bg-success">Activa</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Cancelada</span>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form method="post" id="eliminarReservaForm">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="submit" class="btn btn-danger me-md-2">
+                                <i class="fas fa-trash"></i> Eliminar Reserva
+                            </button>
+                            <a href="{% url 'reserfast:mis_reservas' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('#eliminarReservaForm');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Confirmación adicional
+        if (confirm('¿Estás completamente seguro de eliminar esta reserva? Esta acción no se puede deshacer.')) {
+            // Animación de salida
+            const card = document.querySelector('.card');
+            card.style.transition = 'opacity 0.5s, transform 0.5s';
+            card.style.opacity = '0.5';
+            card.style.transform = 'scale(0.95)';
+            
+            // Enviar formulario después de la animación
+            setTimeout(() => {
+                form.submit();
+            }, 300);
+        }
+    });
+});
+</script>
+{% endblock %}

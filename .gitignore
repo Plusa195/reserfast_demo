@@ -1,0 +1,73 @@
+# Django demo ignores
+db.sqlite3
+reserfast/local_settings.py
+media/
+staticfiles/
+.venv/
+
+# Debug/test leftovers
+*test*.*
+*debug*.*
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+.next/
+dist/
+.cache/
+.env*
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+.env*
+*.log
+*.pot
+*.mo
+.coverage
+.tox/
+.cache/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+local_settings.py
+media/profile_uploads/
+staticfiles/
+static_collected/
+
+# OS/Editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Local Python virtualenv
+.venv/
+venv/
+
+# Local settings & environment
+reserfast/local_settings.py
+.env
+
+# SQLite dev DB
+reserfast/db.sqlite3
+db.sqlite3
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Temporary files
+*.tmp
+*.temp
+*.bak

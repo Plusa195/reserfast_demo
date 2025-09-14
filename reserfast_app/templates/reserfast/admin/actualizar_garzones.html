@@ -1,0 +1,44 @@
+{% extends 'reserfast/admin/base_admin.html' %}
+{% load static %}
+{% block title-admin %} Actualizar Garzon {% endblock title-admin %}
+
+{% block body-admin %}
+<div class="user-creation-container" style="background: rgba(255, 255, 255, 0.8); border-radius: 15px; padding: 20px;">
+    <!-- La URL cambia dependiendo de si estamos creando o editando un usuario -->
+    <form method="POST">
+        {% csrf_token %}
+        {% comment %} {{ form.as_p }} > con esto creamos inmediatamente el formulario pero sin diseño como uno desee {% endcomment %}
+
+        <div class="form-outline mb-4">
+            {{ form.s_nombreusuario }}
+            <label class="form-label" for="{{ form.s_nombreusuario.id_for_label }}">Nombre</label>
+        </div>
+        <div class="form-outline mb-4">
+            {{ form.s_primerapellidousuario }}
+            <label class="form-label" for="{{ form.s_primerapellidousuario.id_for_label }}">Primer Apellido</label>
+        </div>
+        <div class="form-outline mb-4">
+            {{ form.s_segundoapellidousuario }}
+            <label class="form-label" for="{{ form.s_segundoapellidousuario.id_for_label }}">Segundo Apellido</label>
+        </div>
+        <div class="form-outline mb-4">
+            {{ form.s_usuario }}
+            <label class="form-label" for="{{ form.s_usuario.id_for_label }}">Usuario</label>
+        </div>
+        <div class="form-outline mb-4">
+            {{ form.s_contrasenausuario }}
+            <label class="form-label" for="{{ form.s_contrasenausuario.id_for_label }}">Contraseña</label>
+        </div>
+    
+         <!-- Asumiendo que el campo de género en tu formulario es un ChoiceField -->
+         <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+            <h6 class="mb-0 me-4">Género:</h6>
+            <br>
+            {{ form.fk_id_genero }}
+        </div>
+
+        <!-- El texto del botón cambia dependiendo de la acción -->
+        <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
+    </form>
+</div>
+{% endblock body-admin %}

@@ -1,0 +1,21 @@
+{% load static %}
+
+<div class="mesas-section">
+    <h1 class="text-center">{{ titulo }}</h1>
+    <hr>
+    <div class="mesas-grid">
+        {% for item in mesas_data %}
+        <div class="mesa-card">
+            <div class="mesa-info">
+                <h4>{{ item.mesa.s_nombremesa }}</h4>
+                <p>{{ item.mesa.s_descripcionmesa }}</p>
+                {% if item.disponible %}
+                    <a href="{% url 'reserfast:crear_reserva' %}?mesa={{ item.mesa.id_mesa }}" class="btn btn-success">Disponible</a>
+                {% else %}
+                    <a href="#" class="btn btn-danger">No Disponible</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

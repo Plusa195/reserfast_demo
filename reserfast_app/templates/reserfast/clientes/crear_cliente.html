@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="shortcut icon" href="{% static 'index_img/logo.png' %}" />
+  <title>ReserFast Demo</title>
+  <style>
+    body {
+        background-position: center;
+        background-image: url("{% static 'index_img/fondo_clientes1.jpg' %}");
+        background-attachment: fixed;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
+</head>
+<body >
+
+  
+  <section class="h-100">
+    <div class="container py-5 h-100" >
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col">
+          <div class="card card-registration my-4 bg-dark text-white" >
+            <div class="row g-0">
+              <div class="col-xl-6 d-none d-xl-block">
+                <!-- img de crear cuenta-->
+                <img src= "{% static 'index_img/crear_cuenta_cliente3.jpg'%}"
+                  alt="crear_cuenta" class="img-fluid"
+                  style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem; padding:10px" />
+              </div>
+              <div class="col-xl-6">
+                <div class="card-body p-md-5 text-black">
+                  <h3 class="mb-5 text-uppercase">Registro cliente</h3>
+          
+                  <form method="POST">
+                      {% csrf_token %}
+                      {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                          <ul>
+                          {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                          {% endfor %}
+                          </ul>
+                        </div>
+                      {% endif %}
+          
+                      <div class="form-outline mb-4">
+                          {{ form.s_primernombrecliente }}
+                          <label class="form-label" for="{{ form.s_primerprimernombrecliente.id_for_label }}">Nombre</label>
+                      </div>
+          
+                      {% comment %} <div class="form-outline mb-4">
+                          {{ form.s_segundonombrecliente }}
+                          <label class="form-label" for="{{ form.s_segundonombrecliente.id_for_label }}">Segundo Nombre</label>
+                      </div> {% endcomment %}
+          
+                      <div class="form-outline mb-4">
+                          {{ form.s_primerapellidocliente }}
+                          <label class="form-label" for="{{ form.s_primerapellidocliente.id_for_label }}">Primer Apellido</label>
+                      </div>
+          
+                      <div class="form-outline mb-4">
+                          {{ form.s_segundoapellidocliente }}
+                          <label class="form-label" for="{{ form.s_segundoapellidocliente.id_for_label }}">Segundo Apellido</label>
+                      </div>
+          
+                      <div class="form-outline mb-4">
+                          {{ form.s_rut }}
+                          <label class="form-label" for="{{ form.s_rut.id_for_label }}">RUT</label>
+                          {% if form.s_rut.errors %}
+                          <ul class="errorlist">
+                              {% for error in form.s_rut.errors %}
+                                  <li style="color:#dc2626" >{{ error }}</li>
+                              {% endfor %}
+                          </ul>
+                          {% endif %}
+                      </div>
+          
+                      <!-- Asumiendo que el campo de género en tu formulario es un ChoiceField -->
+                      <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+                          <h6 class="mb-0 me-4">Género:</h6>
+                          <br>
+                          {{ form.fk_id_genero }}
+                      </div>
+          
+                      <div class="form-outline mb-4">
+                          {{ form.s_email }}
+                          <label class="form-label" for="{{ form.s_email.id_for_label }}">Email</label>
+                          {% if form.s_email.errors %}
+                            {% for error in form.s_email.errors  %}
+                              <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                          {% endif %}
+                      </div>
+          
+                      <div class="form-outline mb-4">
+                          {{ form.s_contrasena }}
+                          <label class="form-label" for="{{ form.s_contrasena.id_for_label }}">Contraseña</label>
+                          {% if form.s_contrasena.errors %}
+                          {% for error in form.s_contrasena.errors  %}
+                              <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                          {% endif %}
+                         <div style="display:flex;gap:10px;align-items:center;">
+                             {{ form.confirmar_contrasena }}
+                             <label class="form-label" for="{{ form.confirmar_contrasena.id_for_label }}">Confirmar Contraseña</label>
+                         </div>
+                         {% if form.confirmar_contrasena.errors %}
+                             {% for error in form.confirmar_contrasena.errors %}
+                                 <div class="alert alert-danger">{{ error }}</div>
+                             {% endfor %}
+                         {% endif %}
+                         
+                      </div>
+          
+                      <!-- Asegúrate de agregar el campo para términos y condiciones si lo tienes en tu modelo/formulario -->
+                      <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="aceptaTerminos" name="aceptaTerminos">
+                          <label class="form-check-label" for="aceptaTerminos">
+                              Acepta los <a href="">términos y condiciones</a>
+                          </label>
+                      </div>
+
+
+                  <div class="d-flex justify-content-end pt-3">
+                    {% comment %} <button type="button" class="btn btn-light btn-lg">Limpiar todo</button> {% endcomment %}
+                    <button type="submit" class="btn btn-warning btn-lg ms-2">Crear Cuenta</button>
+                  </div>
+                </form>
+                  
+  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+</body>
+</html>

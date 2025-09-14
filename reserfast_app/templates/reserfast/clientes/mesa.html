@@ -1,0 +1,48 @@
+{% extends "reserfast/clientes/base_cliente.html" %}
+{% load static %}
+{% block title %} Reserva Mesa {% endblock title %}
+
+{% block body %}
+
+<br><br>
+
+<div class="container fecha mt-4 mb-5">
+    <div class="text-white reservation-container">
+        <div class="reservation-details">
+            <h4>Seleccione Fecha y Hora</h4>
+            <form>
+                <div class="form-group row">
+                    <div class="col-6 col-md-3 mb-2">
+                        <label for="fechaInicio" class="form-label">Fecha de Inicio:</label>
+                        <input type="date" class="form-control form-control-sm" id="fechaInicio" required>
+                    </div>
+                    <div class="col-6 col-md-3 mb-2">
+                        <label for="horaInicio" class="form-label">Hora de Inicio:</label>
+                        <input type="time" class="form-control form-control-sm" id="horaInicio" required>
+                    </div>
+                </div>
+                {% comment %} <button type="submit" class="btn btn-primary mt-2">Reservar para todas las mesas</button> {% endcomment %}
+                <a href="{% url "menu_cliente" %}" type="submit" class="btn btn-primary mt-2">Reservar para todas las mesas</a>
+            </form>
+        </div>
+        <div class="total-results">
+            <h5>Total Menús:</h5>
+            <p>$10.0000</p>
+        </div>
+    </div>
+</div>
+
+
+
+<hr>
+
+{% include "reserfast/clientes/sub_mesa.html" with titulo="Interior" mesas_data=mesas_interior %}
+<br>
+{% include "reserfast/clientes/sub_mesa.html" with titulo="Terraza" mesas_data=mesas_terraza %}
+
+<br>
+{% include "reserfast/clientes/sub_mesa.html" with titulo="VIP" mesas_data=mesas_vip %}
+
+<br>
+
+{% endblock body %}

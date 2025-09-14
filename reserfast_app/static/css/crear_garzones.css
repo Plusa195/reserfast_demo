@@ -1,0 +1,15 @@
+.elegant-table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.6); /* Fondo blanco semi-transparente */
+    margin: 50px auto; /* Margen superior e inferior */
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); /* Sombra suave alrededor */
+}
+
+.elegant-table {
+    margin: 0 auto; /* Centrar tabla */
+    max-width: 90%; /* No permitir que ocupe toda la anchura del contenedor */
+}

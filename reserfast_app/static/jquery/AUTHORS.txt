@@ -1,0 +1,372 @@
+Authors ordered by first contribution
+A list of current team members is available at http://jqueryui.com/about
+
+Paul Bakaus <correo@example.com>
+Richard Worth <correo@example.com>
+Yehuda Katz <correo@example.com>
+Sean Catchpole <correo@example.com>
+John Resig <correo@example.com>
+Tane Piper <correo@example.com>
+Dmitri Gaskin <correo@example.com>
+Klaus Hartl <correo@example.com>
+Stefan Petre <correo@example.com>
+Gilles van den Hoven <correo@example.com>
+Micheil Bryan Smith <correo@example.com>
+Jörn Zaefferer <correo@example.com>
+Marc Grabanski <correo@example.com>
+Keith Wood <correo@example.com>
+Brandon Aaron <correo@example.com>
+Scott González <correo@example.com>
+Eduardo Lundgren <correo@example.com>
+Aaron Eisenberger <correo@example.com>
+Joan Piedra <correo@example.com>
+Bruno Basto <correo@example.com>
+Remy Sharp <correo@example.com>
+Bohdan Ganicky <correo@example.com>
+David Bolter <correo@example.com>
+Chi Cheng <correo@example.com>
+Ca-Phun Ung <correo@example.com>
+Ariel Flesler <correo@example.com>
+Maggie Wachs <correo@example.com>
+Scott Jehl <correo@example.com>
+Todd Parker <correo@example.com>
+Andrew Powell <correo@example.com>
+Brant Burnett <correo@example.com>
+Douglas Neiner <correo@example.com>
+Paul Irish <correo@example.com>
+Ralph Whitbeck <correo@example.com>
+Thibault Duplessis <correo@example.com>
+Dominique Vincent <correo@example.com>
+Jack Hsu <correo@example.com>
+Adam Sontag <correo@example.com>
+Carl Fürstenberg <correo@example.com>
+Kevin Dalman <correo@example.com>
+Alberto Fernández Capel <correo@example.com>
+Jacek Jędrzejewski (http://jacek.jedrzejewski.name)
+Ting Kuei <correo@example.com>
+Samuel Cormier-Iijima <correo@example.com>
+Jon Palmer <correo@example.com>
+Ben Hollis <correo@example.com>
+Justin MacCarthy <correo@example.com>
+Eyal Kobrigo <correo@example.com>
+Tiago Freire <correo@example.com>
+Nombre Apellido Tres <correo@example.com>
+Holger Rüprich <correo@example.com>
+Ziling Zhao <correo@example.com>
+Mike Alsup <correo@example.com>
+Robson Braga Araujo <correo@example.com>
+Pierre-Henri Ausseil <correo@example.com>
+Christopher McCulloh <correo@example.com>
+Andrew Newcomb <correo@example.com>
+Lim Chee Aun <correo@example.com>
+Jorge Barreiro <correo@example.com>
+Daniel Steigerwald <correo@example.com>
+John Firebaugh <correo@example.com>
+John Enters <correo@example.com>
+Andrey Kapitcyn <correo@example.com>
+Dmitry Petrov <correo@example.com>
+Eric Hynds <correo@example.com>
+Chairat Sunthornwiphat <correo@example.com>
+Josh Varner <correo@example.com>
+Stéphane Raimbault <correo@example.com>
+Jay Merrifield <correo@example.com>
+J. Ryan Stinnett <correo@example.com>
+Peter Heiberg <correo@example.com>
+Alex Dovenmuehle <correo@example.com>
+Jamie Gegerson <correo@example.com>
+Raymond Schwartz <correo@example.com>
+Phillip Barnes <correo@example.com>
+Kyle Wilkinson <correo@example.com>
+Khaled AlHourani <correo@example.com>
+Marian Rudzynski <correo@example.com>
+Jean-Francois Remy <correo@example.com>
+Doug Blood <correo@example.com>
+Filippo Cavallarin <correo@example.com>
+Heiko Henning <correo@example.com>
+Aliaksandr Rahalevich <correo@example.com>
+Mario Visic <correo@example.com>
+Xavi Ramirez <correo@example.com>
+Max Schnur <correo@example.com>
+Saji Nediyanchath <correo@example.com>
+Corey Frang <correo@example.com>
+Aaron Peterson <correo@example.com>
+Ivan Peters <correo@example.com>
+Mohamed Cherif Bouchelaghem <correo@example.com>
+Marcos Sousa <correo@example.com>
+Michael DellaNoce <correo@example.com>
+George Marshall <correo@example.com>
+Tobias Brunner <correo@example.com>
+Nombre Apellido Solli <correo@example.com>
+David Petersen <correo@example.com>
+Dan Heberden <correo@example.com>
+William Kevin Manire <correo@example.com>
+Gilmore Davidson <correo@example.com>
+Michael Wu <correo@example.com>
+Adam Parod <correo@example.com>
+Guillaume Gautreau <correo@example.com>
+Marcel Toele <correo@example.com>
+Dan Streetman <correo@example.com>
+Matt Hoskins <correo@example.com>
+Giovanni Giacobbi <correo@example.com>
+Kyle Florence <correo@example.com>
+Pavol Hluchý <correo@example.com>
+Hans Hillen <correo@example.com>
+Mark Johnson <correo@example.com>
+Trey Hunner <correo@example.com>
+Shane Whittet <correo@example.com>
+Edward A Faulkner <correo@example.com>
+Adam Baratz <correo@example.com>
+Kato Kazuyoshi <correo@example.com>
+Eike Send <correo@example.com>
+Kris Borchers <correo@example.com>
+Eddie Monge <correo@example.com>
+Israel Tsadok <correo@example.com>
+Carson McDonald <correo@example.com>
+Jason Davies <correo@example.com>
+Garrison Locke <correo@example.com>
+David Murdoch <correo@example.com>
+Benjamin Scott Boyle <correo@example.com>
+Jesse Baird <correo@example.com>
+Jonathan Vingiano <correo@example.com>
+Dylan Just <correo@example.com>
+Hiroshi Tomita <correo@example.com>
+Glenn Goodrich <correo@example.com>
+Tarafder Ashek-E-Elahi <correo@example.com>
+Ryan Neufeld <correo@example.com>
+Marc Neuwirth <correo@example.com>
+Philip Graham <correo@example.com>
+Benjamin Sterling <correo@example.com>
+Wesley Walser <correo@example.com>
+Kouhei Sutou <correo@example.com>
+Karl Kirch <correo@example.com>
+Chris Kelly <correo@example.com>
+Jason Oster <correo@example.com>
+Felix Nagel <correo@example.com>
+Alexander Polomoshnov <correo@example.com>
+David Leal <correo@example.com>
+Igor Milla <correo@example.com>
+Dave Methvin <correo@example.com>
+Florian Gutmann <correo@example.com>
+Marwan Al Jubeh <correo@example.com>
+Milan Broum <correo@example.com>
+Nombre Apellido Sauer <correo@example.com>
+Gaëtan Muller <correo@example.com>
+Michel Weimerskirch <correo@example.com>
+William Griffiths <correo@example.com>
+Stojce Slavkovski <correo@example.com>
+David Soms <correo@example.com>
+David De Sloovere <correo@example.com>
+Michael P. Jung <correo@example.com>
+Shannon Pekary <correo@example.com>
+Dan Wellman <correo@example.com>
+Matthew Edward Hutton <correo@example.com>
+James Khoury <correo@example.com>
+Rob Loach <correo@example.com>
+Alberto Monteiro <correo@example.com>
+Alex Rhea <correo@example.com>
+Krzysztof Rosiński <correo@example.com>
+Ryan Olton <correo@example.com>
+Genie <correo@example.com>
+Rick Waldron <correo@example.com>
+Ian Simpson <correo@example.com>
+Lev Kitsis <correo@example.com>
+TJ VanToll <correo@example.com>
+Justin Domnitz <correo@example.com>
+Douglas Cerna <correo@example.com>
+Bert ter Heide <correo@example.com>
+Jasvir Nagra <correo@example.com>
+Yuriy Khabarov <correo@example.com>
+Harri Kilpiö <correo@example.com>
+Lado Lomidze <correo@example.com>
+Amir E. Aharoni <correo@example.com>
+Simon Sattes <correo@example.com>
+Jo Liss <correo@example.com>
+Guntupalli Karunakar <correo@example.com>
+Shahyar Ghobadpour <correo@example.com>
+Lukasz Lipinski <correo@example.com>
+Timo Tijhof <correo@example.com>
+Jason Moon <correo@example.com>
+Nombre Apellido Frost <correo@example.com>
+Eneko Illarramendi <correo@example.com>
+EungJun Yi <correo@example.com>
+Courtland Allen <correo@example.com>
+Viktar Varvanovich <correo@example.com>
+Danny Trunk <correo@example.com>
+Pavel Stetina <correo@example.com>
+Michael Stay <correo@example.com>
+Steven Roussey <correo@example.com>
+Michael Hollis <correo@example.com>
+Lee Rowlands <correo@example.com>
+Timmy Willison <correo@example.com>
+Karl Swedberg <correo@example.com>
+Baoju Yuan <correo@example.com>
+Maciej Mroziński <correo@example.com>
+Nombre Apellido Dalmolin <correo@example.com>
+Mark Aaron Shirley <correo@example.com>
+Nombre Apellido Hoch <correo@example.com>
+Jiayi Yang <correo@example.com>
+Philipp Benjamin Köppchen <correo@example.com>
+Sindre Sorhus <correo@example.com>
+Bernhard Sirlinger <correo@example.com>
+Jared A. Scheel <correo@example.com>
+Rafael Xavier de Souza <correo@example.com>
+John Chen <correo@example.com>
+Robert Beuligmann <correo@example.com>
+Dale Kocian <correo@example.com>
+Mike Sherov <correo@example.com>
+Andrew Couch <correo@example.com>
+Marc-Andre Lafortune <correo@example.com>
+Nate Eagle <correo@example.com>
+David Souther <correo@example.com>
+Mathias Stenbom <correo@example.com>
+Sergey Kartashov <correo@example.com>
+Avinash R <correo@example.com>
+Ethan Romba <correo@example.com>
+Cory Gackenheimer <correo@example.com>
+Nombre Apellido Nombre Apellido Kaniefsky <correo@example.com>
+Roman Salnikov <correo@example.com>
+Anika Henke <correo@example.com>
+Samuel Bovée <correo@example.com>
+Fabrício Matté <correo@example.com>
+Viktor Kojouharov <correo@example.com>
+Pawel Maruszczyk (http://hrabstwo.net)
+Pavel Selitskas <correo@example.com>
+Bjørn Johansen <correo@example.com>
+Matthieu Penant <correo@example.com>
+Dominic Barnes <correo@example.com>
+David Sullivan <correo@example.com>
+Thomas Jaggi <correo@example.com>
+Vahid Sohrabloo <correo@example.com>
+Travis Carden <correo@example.com>
+Bruno M. Custódio <correo@example.com>
+Nathanael Silverman <correo@example.com>
+Christian Wenz <correo@example.com>
+Steve Urmston <correo@example.com>
+Zaven Muradyan <correo@example.com>
+Woody Gilk <correo@example.com>
+Zbigniew Motyka <correo@example.com>
+Suhail Alkowaileet <correo@example.com>
+Toshi MARUYAMA <correo@example.com>
+David Hansen <correo@example.com>
+Brian Grinstead <correo@example.com>
+Christian Klammer <correo@example.com>
+Steven Luscher <correo@example.com>
+Gan Eng Chin <correo@example.com>
+Gabriel Schulhof <correo@example.com>
+Alexander Schmitz <correo@example.com>
+Vilhjálmur Skúlason <correo@example.com>
+Siebrand Mazeland <correo@example.com>
+Mohsen Ekhtiari <correo@example.com>
+Pere Orga <correo@example.com>
+Jasper de Groot <correo@example.com>
+Stephane Deschamps <correo@example.com>
+Jyoti Deka <correo@example.com>
+Andrei Picus <correo@example.com>
+Ondrej Novy <correo@example.com>
+Jacob McCutcheon <correo@example.com>
+Monika Piotrowicz <correo@example.com>
+Imants Horsts <correo@example.com>
+Eric Dahl <correo@example.com>
+Dave Stein <correo@example.com>
+Dylan Barrell <correo@example.com>
+Daniel DeGroff <correo@example.com>
+Michael Wiencek <correo@example.com>
+Thomas Meyer <correo@example.com>
+Ruslan Yakhyaev <correo@example.com>
+Brian J. Dowling <correo@example.com>
+Ben Higgins <correo@example.com>
+Yermo Lamers <correo@example.com>
+Patrick Stapleton <correo@example.com>
+Trisha Crowley <correo@example.com>
+Usman Akeju <correo@example.com>
+Nombre Apellido Menezes <correo@example.com>
+Jacques Perrault <correo@example.com>
+Frederik Elvhage <correo@example.com>
+Will Holley <correo@example.com>
+Uri Gilad <correo@example.com>
+Richard Gibson <correo@example.com>
+Simen Bekkhus <correo@example.com>
+Chen Eshchar <correo@example.com>
+Bruno Pérel <correo@example.com>
+Mohammed Alshehri <correo@example.com>
+Lisa Seacat DeLuca <correo@example.com>
+Anne-Gaelle Colom <correo@example.com>
+Adam Foster <correo@example.com>
+Luke Page <correo@example.com>
+Daniel Owens <correo@example.com>
+Michael Orchard <correo@example.com>
+Marcus Warren <correo@example.com>
+Nils Heuermann <correo@example.com>
+Marco Ziech <correo@example.com>
+Patricia Juarez <correo@example.com>
+Ben Mosher <correo@example.com>
+Ablay Keldibek <correo@example.com>
+Thomas Applencourt <correo@example.com>
+Jiabao Wu <correo@example.com>
+Eric Lee Carraway <correo@example.com>
+Victor Homyakov <correo@example.com>
+Myeongjin Lee <correo@example.com>
+Liran Sharir <correo@example.com>
+Weston Ruter <correo@example.com>
+Mani Mishra <correo@example.com>
+Hannah Methvin <correo@example.com>
+Leonardo Balter <correo@example.com>
+Benjamin Albert <correo@example.com>
+Michał Gołębiowski-Owczarek <correo@example.com>
+Alyosha Pushak <correo@example.com>
+Fahad Ahmad <correo@example.com>
+Matt Brundage <correo@example.com>
+Francesc Baeta <correo@example.com>
+Piotr Baran <correo@example.com>
+Mukul Hase <correo@example.com>
+Konstantin Dinev <correo@example.com>
+Rand Scullard <correo@example.com>
+Dan Strohl <correo@example.com>
+Maksim Ryzhikov <correo@example.com>
+Amine HADDAD <correo@example.com>
+Amanpreet Singh <correo@example.com>
+Alexey Balchunas <correo@example.com>
+Peter Kehl <correo@example.com>
+Peter Dave Hello <correo@example.com>
+Johannes Schäfer <correo@example.com>
+Ville Skyttä <correo@example.com>
+Ryan Oriecuia <correo@example.com>
+Sergei Ratnikov <correo@example.com>
+milk54 <correo@example.com>
+Evelyn Masso <correo@example.com>
+Robin <correo@example.com>
+Simon Asika <correo@example.com>
+Kevin Cupp <correo@example.com>
+Jeremy Mickelson <correo@example.com>
+Kyle Rosenberg <correo@example.com>
+Petri Partio <correo@example.com>
+pallxk <correo@example.com>
+Luke Brookhart <correo@example.com>
+claudi <correo@example.com>
+Eirik Sletteberg <correo@example.com>
+Albert Johansson <correo@example.com>
+A. Wells <correo@example.com>
+Robert Brignull <correo@example.com>
+Horus68 <correo@example.com>
+Maksymenkov Eugene <correo@example.com>
+OskarNS <correo@example.com>
+Gez Quinn <correo@example.com>
+jigar gala <correo@example.com>
+Florian Wegscheider <correo@example.com>
+Fatér Zsolt <correo@example.com>
+Szabolcs Szabolcsi-Toth <correo@example.com>
+Jérémy Munsch <correo@example.com>
+Hrvoje Novosel <correo@example.com>
+Paul Capron <correo@example.com>
+Micah Miller <correo@example.com>
+sakshi87 <correo@example.com>
+Mikolaj Wolicki <correo@example.com>
+Patrick McKay <correo@example.com>
+c-lambert <correo@example.com>
+Josep Sanz <correo@example.com>
+Ben Mullins <correo@example.com>
+Christian Oliff <correo@example.com>
+dependabot[bot] <+56 9 12345678+dependabot[bot]@users.noreply.github.com>
+Adam Lidén Hällgren <correo@example.com>
+James Hinderks <correo@example.com>
+Denny Septian Panggabean <correo@example.com>

@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ReserFast Demo</title>
+    <link rel="stylesheet" href="{% static 'css/form_api.css' %}"> <!-- Asegúrate de que 'css/estilos.css' es la ruta correcta a tu archivo CSS -->
+</head>
+<body>
+    <div class="form-container">
+        <h1>Ingresar los datos del producto</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_descripcion">Descripción:</label>
+                {{ form.descripcion }}
+            </div>
+            <div class="form-group">
+                <label for="id_precio">Precio:</label>
+                {{ form.precio }}
+            </div>
+            <div class="form-group">
+                <label for="id_tip_amount">Vuelto:</label>
+                {{ form.tip_amount }}
+            </div>
+            <br>
+            {% if messages %}
+                <div class="messages">
+                {% for message in messages %}
+                    <div class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+                {% endfor %}
+                </div>
+            {% endif %}
+            <br>
+            <input type="submit" value="Emitir Venta">
+        </form>
+    </div>
+</body>
+</html>

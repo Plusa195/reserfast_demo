@@ -1,0 +1,245 @@
+{% extends 'reserfast/base_index.html' %}
+{% load static %}
+
+{% block body-index %}
+<div class="hero-section">
+  <div class="hero-overlay"></div>
+  
+  <div class="hero-decorations">
+    <div class="decoration-circle decoration-1"></div>
+    <div class="decoration-circle decoration-2"></div>
+    <div class="decoration-circle decoration-3"></div>
+  </div>
+  
+  <div class="container position-relative">
+    <div class="row align-items-center">
+      {% if session_type != 'none' %}
+      <div class="col-12 mb-3">
+        <div class="alert alert-success d-flex justify-content-between align-items-center shadow-sm" role="alert">
+          <div>
+            <strong>Sesión activa:</strong>
+            {{ perfil_sesion|title }}{% if nombre_sesion %} — {{ nombre_sesion }}{% endif %}
+          </div>
+          <div>
+            {% if panel_url %}
+              <a href="{% url panel_url %}" class="btn btn-sm btn-outline-success me-2">
+                <i class="fas fa-gauge-high"></i> Ir a panel
+              </a>
+            {% endif %}
+            {% if logout_url %}
+              <a href="{% url logout_url %}" class="btn btn-sm btn-outline-danger">
+                <i class="fas fa-right-from-bracket"></i> Cerrar sesión
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      <div class="col-md-6 text-center" data-aos="fade-right">
+        <div class="logo-container position-relative">
+          <img src="{% static 'index_img/logo.png' %}" alt="ReserFast logo" 
+               class="img-fluid rounded-circle shadow-lg mb-4 logo-main" 
+               style="max-width:300px; border: 6px solid #ffc107; animation: pulse 3s infinite;">
+          <div class="logo-glow"></div>
+        </div>
+      </div>
+      <div class="col-md-6 text-center text-md-start" data-aos="fade-left">
+        <h1 class="display-2 fw-bold mb-4 text-shadow" 
+            style="font-family: 'Dancing Script', cursive; color: #ffffff; text-shadow: 3px 3px 6px rgba(0,0,0,0.7), 0 0 20px rgba(255,193,7,0.5); font-size: 4rem;">
+          Bienvenido a ReserFast
+        </h1>
+        <p class="lead fs-4 mb-4 text-white" data-aos="fade-up" data-aos-delay="100" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7); font-weight: 500;">
+           🍽️ Reserva tu mesa y disfruta de una experiencia gastronómica inigualable
+        </p>
+        <p class="fs-5 mb-4 text-white" data-aos="fade-up" data-aos-delay="200" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7); opacity: 0.95;">
+           🚀 La forma más fácil y rápida de reservar en tu restaurante favorito
+        </p>
+        <div class="d-grid gap-3 d-md-block" data-aos="fade-up" data-aos-delay="300">
+          <a href="{% url 'reserfast:login_clientes' %}" 
+             class="btn btn-warning btn-lg me-2 mb-2 px-5 py-3 shadow-lg btn-hover-effect" 
+             style="border-radius: 50px; font-weight: 600; transform: translateY(0); transition: all 0.3s ease; background: linear-gradient(45deg, #ffc107, #ffb300); border: none; color: #000; font-size: 1.1rem;">
+            <i class="fas fa-utensils me-2"></i> Reservar Ahora
+          </a>
+          <a href="{% url 'reserfast:login_admin' %}" 
+             class="btn btn-outline-light btn-lg me-2 mb-2 px-5 py-3 shadow-lg btn-hover-effect" 
+             style="border-radius: 50px; font-weight: 600; border-width: 3px; transform: translateY(0); transition: all 0.3s ease; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); font-size: 1.1rem;">
+            <i class="fas fa-user-shield me-2"></i> Panel Admin
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container my-5 py-5">
+  <div class="text-center mb-5" data-aos="fade-up">
+    <h2 class="display-5 fw-bold mb-3" style="color: #333;">
+      <i class="fas fa-star text-warning me-3"></i>¿Por qué elegir ReserFast?
+    </h2>
+    <p class="lead text-muted">Descubre las ventajas de nuestra plataforma innovadora</p>
+    <hr class="w-25 mx-auto" style="height: 4px; background: linear-gradient(90deg, #ffc107, #ff8c00); border: none; border-radius: 2px;">
+  </div>
+  
+  <div class="row g-4">
+    <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+      <div class="card h-100 shadow-lg border-0 text-center card-hover" style="transition: all 0.4s ease; border-radius: 20px; overflow: hidden;">
+        <div class="card-body p-4 position-relative">
+          <div class="icon-container mb-4">
+            <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center position-relative" 
+                 style="width: 90px; height: 90px; box-shadow: 0 10px 25px rgba(255,193,7,0.3);">
+              <i class="fas fa-calendar-check fa-2x text-white"></i>
+              <div class="icon-pulse"></div>
+            </div>
+          </div>
+          <h5 class="card-title fw-bold mb-3" style="color: #333;">Reserva Fácil</h5>
+          <p class="card-text text-muted">
+            Elige fecha, hora, mesa y menú en segundos. Proceso simple, rápido e intuitivo.
+          </p>
+          <div class="mt-4">
+            <span class="badge bg-warning text-dark px-3 py-2 fs-6" style="border-radius: 15px;">
+              <i class="fas fa-bolt me-1"></i>Instantáneo
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+      <div class="card h-100 shadow-lg border-0 text-center card-hover" style="transition: all 0.4s ease; border-radius: 20px; overflow: hidden;">
+        <div class="card-body p-4 position-relative">
+          <div class="icon-container mb-4">
+            <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center position-relative" 
+                 style="width: 90px; height: 90px; box-shadow: 0 10px 25px rgba(40,167,69,0.3);">
+              <i class="fas fa-concierge-bell fa-2x text-white"></i>
+              <div class="icon-pulse"></div>
+            </div>
+          </div>
+          <h5 class="card-title fw-bold mb-3" style="color: #333;">Atención Premium</h5>
+          <p class="card-text text-muted">
+            Nuestro equipo profesional te espera para brindarte el mejor servicio personalizado.
+          </p>
+          <div class="mt-4">
+            <span class="badge bg-success px-3 py-2 fs-6" style="border-radius: 15px;">
+              <i class="fas fa-clock me-1"></i>24/7
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+      <div class="card h-100 shadow-lg border-0 text-center card-hover" style="transition: all 0.4s ease; border-radius: 20px; overflow: hidden;">
+        <div class="card-body p-4 position-relative">
+          <div class="icon-container mb-4">
+            <div class="bg-danger rounded-circle d-inline-flex align-items-center justify-content-center position-relative" 
+                 style="width: 90px; height: 90px; box-shadow: 0 10px 25px rgba(220,53,69,0.3);">
+              <i class="fas fa-star fa-2x text-white"></i>
+              <div class="icon-pulse"></div>
+            </div>
+          </div>
+          <h5 class="card-title fw-bold mb-3" style="color: #333;">Menú Exclusivo</h5>
+          <p class="card-text text-muted">
+            Descubre platos únicos y deliciosos para todos los gustos y ocasiones especiales.
+          </p>
+          <div class="mt-4">
+            <span class="badge bg-danger px-3 py-2 fs-6" style="border-radius: 15px;">
+              <i class="fas fa-crown me-1"></i>Gourmet
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-dark text-white py-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%) !important;">
+  <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0, 0, 0, 0.3);"></div>
+  
+  <div class="position-absolute top-0 start-0 w-100 h-100">
+    <div class="stats-bg-pattern"></div>
+  </div>
+  
+  <div class="container position-relative">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <h3 class="fw-bold text-warning mb-3" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+        <i class="fas fa-chart-line me-3"></i>Nuestros Números Hablan
+      </h3>
+      <p class="lead text-white" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">Resultados que nos respaldan</p>
+    </div>
+    <div class="row text-center">
+      <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="p-3 stats-card">
+          <div class="stats-icon mb-3">
+            <i class="fas fa-users fa-2x text-warning"></i>
+          </div>
+          <h3 class="display-4 fw-bold text-warning mb-2 counter" data-target="500">0</h3>
+          <p class="lead mb-0">Reservas Exitosas</p>
+          <small class="text-muted">Este mes</small>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="p-3 stats-card">
+          <div class="stats-icon mb-3">
+            <i class="fas fa-utensils fa-2x text-warning"></i>
+          </div>
+          <h3 class="display-4 fw-bold text-warning mb-2 counter" data-target="50">0</h3>
+          <p class="lead mb-0">Platos únicos</p>
+          <small class="text-muted">En nuestro menú</small>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="p-3 stats-card">
+          <div class="stats-icon mb-3">
+            <i class="fas fa-star fa-2x text-warning"></i>
+          </div>
+          <h3 class="display-4 fw-bold text-warning mb-2">4.9</h3>
+          <p class="lead mb-0">Calificación</p>
+          <small class="text-muted">
+            <i class="fas fa-star text-warning"></i>
+            <i class="fas fa-star text-warning"></i>
+            <i class="fas fa-star text-warning"></i>
+            <i class="fas fa-star text-warning"></i>
+            <i class="fas fa-star text-warning"></i>
+          </small>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+        <div class="p-3 stats-card">
+          <div class="stats-icon mb-3">
+            <i class="fas fa-clock fa-2x text-warning"></i>
+          </div>
+          <h3 class="display-4 fw-bold text-warning mb-2">24/7</h3>
+          <p class="lead mb-0">Disponibilidad</p>
+          <small class="text-muted">Siempre abierto</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container my-5 py-5">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <h3 class="fw-bold mb-4" style="color: #333;">¿Necesitas ayuda?</h3>
+      <p class="lead mb-4 text-muted">
+        Nuestro equipo está disponible para asistirte en cualquier momento.
+      </p>
+      <div class="d-grid gap-2 d-md-block">
+        <a href="mailto:contacto@reserfast.com" class="btn btn-outline-primary btn-lg me-2 mb-2" style="border-radius: 50px;">
+          <i class="fas fa-envelope me-2"></i> Contactanos
+        </a>
+        <a href="tel:+1234567890" class="btn btn-outline-success btn-lg mb-2" style="border-radius: 50px;">
+          <i class="fas fa-phone me-2"></i> Llamar
+        </a>
+      </div>
+    </div>
+    <div class="col-md-6 text-center">
+      <div class="p-4">
+        <i class="fas fa-headset fa-5x text-primary mb-3"></i>
+        <h5 class="fw-bold">Soporte 24/7</h5>
+        <p class="text-muted">Siempre disponibles para ayudarte</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body-index %}

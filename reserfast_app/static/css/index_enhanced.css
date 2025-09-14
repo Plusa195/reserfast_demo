@@ -1,0 +1,180 @@
+/* Estilos mejorados para ReserFast Index Page */
+
+/* Hero Section con mejor contraste y legibilidad */
+.hero-section {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%) !important;
+  position: relative;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.hero-section .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Texto con sombras mejoradas para máxima legibilidad */
+.hero-section h1 {
+  color: #ffffff !important;
+  text-shadow: 
+    3px 3px 6px rgba(0,0,0,0.9),
+    0 0 20px rgba(255,193,7,0.6),
+    0 0 40px rgba(255,193,7,0.3) !important;
+  font-weight: 700 !important;
+}
+
+.hero-section p {
+  color: #ffffff !important;
+  text-shadow: 
+    2px 2px 4px rgba(0,0,0,0.9),
+    1px 1px 2px rgba(0,0,0,0.7) !important;
+  font-weight: 500 !important;
+}
+
+/* Botones con mejor contraste */
+.btn-warning {
+  background: linear-gradient(45deg, #ffc107, #ffb300) !important;
+  border: none !important;
+  color: #000 !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4) !important;
+}
+
+.btn-warning:hover {
+  background: linear-gradient(45deg, #ffb300, #ff9800) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.6) !important;
+  color: #000 !important;
+}
+
+.btn-outline-light {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 3px solid rgba(255, 255, 255, 0.9) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7) !important;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: #ffc107 !important;
+  color: #ffc107 !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3) !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.9) !important;
+}
+
+/* Stats section con mejor contraste */
+.stats-section {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%) !important;
+}
+
+.stats-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.stats-section .container {
+  position: relative;
+  z-index: 2;
+}
+
+.stats-section h3,
+.stats-section p {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8) !important;
+}
+
+/* Cards con mejor sombra y hover */
+.card-hover {
+  transition: all 0.3s ease !important;
+  border: none !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+}
+
+.card-hover:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
+}
+
+/* Footer con mejor contraste */
+.footer-section {
+  background: #1a1a1a !important;
+}
+
+.footer-section .text-light,
+.footer-section .text-white {
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
+}
+
+/* Animaciones suaves */
+.floating-shape {
+  animation: float 6s ease-in-out infinite !important;
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-20px); 
+  }
+}
+
+/* Responsive mejoras */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2.5rem !important;
+  }
+  
+  .hero-section p {
+    font-size: 1.1rem !important;
+  }
+  
+  .btn-lg {
+    padding: 12px 24px !important;
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section h1 {
+    font-size: 2rem !important;
+  }
+  
+  .hero-section .lead {
+    font-size: 1rem !important;
+  }
+}
+
+/* Mejoras adicionales de accesibilidad */
+.btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5) !important;
+}
+
+.text-warning {
+  color: #ffc107 !important;
+}
+
+/* Asegurar contraste en todos los elementos */
+.bg-dark .text-light,
+.bg-dark .text-white {
+  color: #ffffff !important;
+}

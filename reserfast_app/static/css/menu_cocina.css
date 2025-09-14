@@ -1,0 +1,204 @@
+
+/* estilo para las bases*/
+.flex-grow-1 {
+    flex-grow: 1!important;
+    background-color: #212529b8;
+}
+
+
+/*Titulo tipo menu*/
+h1.text-center.tipo-menu {
+    color: antiquewhite;
+    font-family: 'Playpen Sans', ui-monospace;
+
+}
+
+/*Container card menu*/
+.container.card-menu {
+    position: relative;
+    padding: 19px 20px 100px 10px;
+}
+
+
+/* Estilos base para la card de menu */
+.card-custom {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    background-color: aliceblue;
+    font-family: 'Playpen Sans', ui-monospace;
+    height : 600px;
+}
+
+.card-custom:hover {
+    transform: scale(1.05);
+}
+
+/* Estilos para la imagen de la tarjeta */
+.card-img-available {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    opacity: 1;
+}
+
+.card-img-unavailable {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    opacity: 0.9;
+}
+
+/* Ajustes adicionales para el cuerpo de la tarjeta */
+.card-custom .card-body {
+    padding: 15px;
+}
+
+/* Estilo para el título y texto de la tarjeta */
+.card-custom .card-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-custom .card-text {
+    margin-bottom: 15px;
+}
+
+/* Ajustes para el grupo de botones de cantidad */
+.input-group.mb-3 {
+    width: 50%;
+    margin: 0 auto;
+}
+
+/* Boton para quitar cantidad de menu a reservar*/
+button.btn.btn-outline-secondary.remove {
+    width: 42px;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    /* background: #e11d48;
+    border-color: #e11d48; */
+}
+
+
+
+/* Boton para quitar cantidad de menu a reservar*/
+button.btn.btn-outline-secondary.more {
+    width: 42px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    /* background: #84cc16;
+    border-color: #84cc16; */
+}
+
+input#quantityInput {
+    height: 38px;
+    top: 16px;
+    border-radius: 3px;
+}
+
+/*estilo para precio de menus*/
+p.card-text.precio-menu {
+    margin: 0px 0px 0px 100px;
+    font-family: 'Abril Fatface', serif;
+    font-family: 'Anton', sans-serif;
+    font-family: 'Dancing Script', cursive;
+    font-family: 'Roboto Mono', monospace;
+    font-family: 'Young Serif', serif;
+}
+
+/* estilo para el switch*/ 
+
+.checkbox-wrapper-5 .check {
+    --size: 40px;
+    position: relative;
+    background: linear-gradient(90deg, #f19af3, #f099b5);
+    line-height: 0;
+    perspective: 400px;
+    font-size: var(--size);
+  }
+  
+  .checkbox-wrapper-5 .check input[type="checkbox"],
+    .checkbox-wrapper-5 .check label,
+    .checkbox-wrapper-5 .check label::before,
+    .checkbox-wrapper-5 .check label::after,
+    .checkbox-wrapper-5 .check {
+    appearance: none;
+    display: inline-block;
+    border-radius: var(--size);
+    border: 0;
+    transition: .35s ease-in-out;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  
+  .checkbox-wrapper-5 .check label {
+    width: calc(2.2 * var(--size));
+    height: var(--size);
+    background: #d7d7d7;
+    overflow: hidden;
+  }
+  
+  .checkbox-wrapper-5 .check input[type="checkbox"] {
+    position: absolute;
+    z-index: 1;
+    width: calc(.8 * var(--size));
+    height: calc(.8 * var(--size));
+    top: calc(.1 * var(--size));
+    left: calc(.1 * var(--size));
+    background: linear-gradient(45deg, #dedede, #ffffff);
+    box-shadow: 0 6px 7px rgba(0,0,0,0.3);
+    outline: none;
+    margin: 0;
+  }
+  
+  .checkbox-wrapper-5 .check input[type="checkbox"]:checked {
+    left: calc(1.3 * var(--size));
+  }
+  
+  .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label {
+    background: transparent;
+  }
+  
+  .checkbox-wrapper-5 .check label::before,
+    .checkbox-wrapper-5 .check label::after {
+    content: "· ·";
+    position: absolute;
+    overflow: hidden;
+    left: calc(.15 * var(--size));
+    top: calc(.5 * var(--size));
+    height: var(--size);
+    letter-spacing: calc(-0.04 * var(--size));
+    color: #9b9b9b;
+    font-family: "Times New Roman", serif;
+    z-index: 2;
+    font-size: calc(.6 * var(--size));
+    border-radius: 0;
+    transform-origin: 0 0 calc(-0.5 * var(--size));
+    backface-visibility: hidden;
+  }
+  
+  .checkbox-wrapper-5 .check label::after {
+    content: "●";
+    top: calc(.65 * var(--size));
+    left: calc(.2 * var(--size));
+    height: calc(.1 * var(--size));
+    width: calc(.35 * var(--size));
+    font-size: calc(.2 * var(--size));
+    transform-origin: 0 0 calc(-0.4 * var(--size));
+  }
+  
+  .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::before,
+    .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::after {
+    left: calc(1.55 * var(--size));
+    top: calc(.4 * var(--size));
+    line-height: calc(.1 * var(--size));
+    transform: rotateY(360deg);
+  }
+  
+  .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::after {
+    height: calc(.16 * var(--size));
+    top: calc(.55 * var(--size));
+    left: calc(1.6 * var(--size));
+    font-size: calc(.6 * var(--size));
+    line-height: 0;
+  }
+  

@@ -1,0 +1,47 @@
+{% extends "reserfast/cocina/base_cocina.html" %}
+{% load static %}
+{% block title %} Reservas {% endblock title %}
+
+{% block body  %}
+
+<div class="elegant-table-container">
+    <h3> Ver reservas </h3>
+    <br>
+    <table class="elegant-table">
+        <thead>
+            <tr>
+                <th class ="columna">ID</th>
+                <th class ="columna">Cliente</th>
+                <th class ="columna">Fecha-Hora</th>
+                <th class ="columna">Segundo Apellido</th>
+                <th class ="columna">Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for garzon in garzones %}
+                <tr>
+                    <!-- aqui vamos agregar los id de reserva -->
+                    <td class="fila"></td>
+                    <td class="fila"></td>
+                    <td class="fila"></td>
+                    <td class="fila"></td>
+                    <!-- aqui vamos agregar las opciones para simular dejar ok la reserva del cliente para que el garzon retire el plato,  osea un estado-->
+
+                    {% comment %} <td class="fila>">
+                        <form method="post" action="{% url 'reserfast:eliminar_garzones' garzon.id_usuario %}">
+                        {% csrf_token %}
+                        <button type="submit" style="background: none; border: none;">
+                          <img src="{% static "index_img/remove.png" %}" style="background-color: transparent">
+                        </button>
+                      </form>       
+                        <a href="{% url "actualizar_garzones" garzon.id_usuario %}"><img src="{% static "index_img/pen.png" %}"> </img></a> </td> {% endcomment %}
+                </tr>
+            {% endfor %}
+        </tbody>
+       
+    </table>
+    <a  href="{% url "agregar_garzones" %}" class="button btn-success agregar-garzon"> Agregar </a>
+    
+</div>
+
+{% endblock %}
