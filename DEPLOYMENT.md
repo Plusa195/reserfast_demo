@@ -6,7 +6,7 @@
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/reserfast_demo.git
+git clone https://github.com/Plusa195/reserfast_demo.git
 cd reserfast_demo
 
 # Crear entorno virtual
